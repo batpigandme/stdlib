@@ -32,13 +32,219 @@ This directory contains [`make`][make] recipes for generating test fixtures.
 
 <!-- /.intro -->
 
+<!-- Usage documentation. -->
+
+<section class="usage">
+
+## Usage
+
+```text
+Usage: make <command> [<ENV_VAR>=<value> <ENV_VAR>=<value> ...]
+```
+
+### Commands
+
+#### test-fixtures
+
+Generates test fixtures across all supported languages (C, C++, Fortran, Julia, Python, and R).
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures
+```
+
+* * *
+
+### C
+
+#### test-fixtures-c
+
+Runs scripts written in C to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-c
+```
+
+#### test-fixtures-c-files
+
+Runs a specified list of scripts written in C to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-c-files FILES='/path/to/fixture/runner1 /path/to/fixture/runner2'
+```
+
+The command requires the following environment variables:
+
+-   **FILES**: list of script file paths.
+
+* * *
+
+### C++
+
+#### test-fixtures-cpp
+
+Runs scripts written in C++ to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-cpp
+```
+
+#### test-fixtures-cpp-files
+
+Runs a specified list of scripts written in C++ to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-cpp-files FILES='/path/to/fixture/runner1 /path/to/fixture/runner2'
+```
+
+The command requires the following environment variables:
+
+-   **FILES**: list of script file paths.
+
+* * *
+
+### Fortran
+
+#### test-fixtures-fortran
+
+Runs scripts written in Fortran to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-fortran
+```
+
+#### test-fixtures-fortran-files
+
+Runs a specified list of scripts written in Fortran to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-fortran-files FILES='/path/to/fixture/runner1 /path/to/fixture/runner2'
+```
+
+The command requires the following environment variables:
+
+-   **FILES**: list of script file paths.
+
+* * *
+
+### Julia
+
+#### test-fixtures-julia
+
+Runs scripts written in Julia to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-julia
+```
+
+#### test-fixtures-julia-files
+
+Runs a specified list of scripts written in Julia to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-julia-files FILES='/path/to/fixture/runner1 /path/to/fixture/runner2'
+```
+
+The command requires the following environment variables:
+
+-   **FILES**: list of script file paths.
+
+* * *
+
+### Python
+
+#### test-fixtures-python
+
+Runs scripts written in Python to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-python
+```
+
+#### test-fixtures-python-files
+
+Runs a specified list of scripts written in Python to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-python-files FILES='/path/to/fixture/runner1 /path/to/fixture/runner2'
+```
+
+The command requires the following environment variables:
+
+-   **FILES**: list of script file paths.
+
+* * *
+
+### R
+
+#### test-fixtures-r
+
+Runs scripts written in R to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-r
+```
+
+#### test-fixtures-r-files
+
+Runs a specified list of scripts written in R to generate test fixtures.
+
+<!-- run-disable -->
+
+```bash
+$ make test-fixtures-r-files FILES='/path/to/fixture/runner1 /path/to/fixture/runner2'
+```
+
+The command requires the following environment variables:
+
+-   **FILES**: list of script file paths.
+
+</section>
+
+<!-- /.usage -->
+
 <!-- Section to include notes. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
 
+* * *
+
 <section class="notes">
+
+## Notes
+
+-   The `test-fixtures-<lang>-files` commands are useful when wanting to regenerate fixtures for a specific subset of fixture runner scripts, rather than discovering and running all scripts of a given language.
 
 </section>
 
 <!-- /.notes -->
+
+<section class="examples">
+
+</section>
+
+<!-- /.examples -->
 
 <!-- Section for all links. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
 
