@@ -18,6 +18,22 @@ limitations under the License.
 
 -->
 
+<!-- lint disable expected-html-sections -->
+
+<!-- FIXME: the following two empty sections are merely to satisfy the linter for `expected-html-sections` which cannot, atm, be turned off -->
+
+<section class="usage">
+
+</section>
+
+<!-- /.usage -->
+
+<section class="examples">
+
+</section>
+
+<!-- /.examples -->
+
 # JavaScript Style Guide
 
 > _An opinionated style guide for writing JavaScript._
@@ -55,7 +71,7 @@ limitations under the License.
 
 ## Introduction
 
-Always abide by the **Law of Code Style Consistency**, or, in other words, _when in Rome, do as the Romans do_. 
+Always abide by the **Law of Code Style Consistency**, or, in other words, _when in Rome, do as the Romans do_.
 
 While the code base to which you want to contribute may be a horrific mess in terms of aesthetic appearance and style, style consistency takes precedence over personal preference and canon. The more consistent a code base is in terms of style, the more readers of the code can focus on what the code does rather than deciphering changes in style.
 
@@ -134,7 +150,7 @@ function query() {
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: space-before-blocks](https://eslint.org/docs/rules/space-before-blocks)
 
 <!-- </rule> -->
 
@@ -168,7 +184,7 @@ function test( arg1, arg2, arg3 ) {
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: space-in-parens](https://eslint.org/docs/rules/space-in-parens)
 
 <!-- </rule> -->
 
@@ -205,7 +221,7 @@ var foo = bar[ 10 ];
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: array-bracket-spacing](https://eslint.org/docs/rules/array-bracket-spacing)
 
 <!-- </rule> -->
 
@@ -245,7 +261,7 @@ var a = 1 + 1;
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: space-infix-ops](https://eslint.org/docs/rules/space-infix-ops)
 
 <!-- </rule> -->
 
@@ -279,7 +295,7 @@ z = z++;
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: space-unary-ops](https://eslint.org/docs/rules/space-unary-ops)
 
 <!-- </rule> -->
 
@@ -321,7 +337,7 @@ Including `1` space after comment marks improves readability.
 
 ##### Enforcement
 
-TODO
+[ESLint rule: spaced-comment](https://eslint.org/docs/rules/spaced-comment)
 
 <!-- </rule> -->
 
@@ -392,7 +408,7 @@ var svg = d3.select( '.main' )
 
 ##### Enforcement
 
-Hard to automatically enforce. Mostly through code review. TODO: partial enforcement via lint rule.
+Hard to automatically enforce. Mostly through code review. [ESLint rule: newline-per-chained-call](https://eslint.org/docs/rules/newline-per-chained-call) (partial enforcement).
 
 <!-- </rule> -->
 
@@ -531,7 +547,7 @@ default:
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: indent](https://eslint.org/docs/rules/indent)
 
 <!-- </rule> -->
 
@@ -569,7 +585,7 @@ var bar = foo();
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: semi](https://eslint.org/docs/rules/semi)
 
 <!-- </rule> -->
 
@@ -607,7 +623,7 @@ var foo = ( a === b ) ? a*3 : b/4;
 
 ##### Enforcement
 
-TODO
+[ESLint rule: stdlib/ternary-condition-parentheses](https://github.com/stdlib-js/eslint-plugin-stdlib)
 
 <!-- </rule> -->
 
@@ -658,7 +674,7 @@ function myFunction() {
 
 ##### Enforcement
 
-TODO: ESLint rule (and code review)
+[ESLint rule: vars-on-top](https://eslint.org/docs/rules/vars-on-top) (and code review)
 
 <!-- </rule> -->
 
@@ -694,7 +710,7 @@ var foo = 3;
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: one-var](https://eslint.org/docs/rules/one-var)
 
 <!-- </rule> -->
 
@@ -729,7 +745,7 @@ var i;
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: max-statements-per-line](https://eslint.org/docs/rules/max-statements-per-line)
 
 <!-- </rule> -->
 
@@ -837,7 +853,7 @@ var str = 'Hello';
 
 ##### Enforcement
 
-TODO: ESLint rule
+[ESLint rule: quotes](https://eslint.org/docs/rules/quotes)
 
 <!-- </rule> -->
 
@@ -855,7 +871,7 @@ Immediate evaluation prevents a template being stored in a variable. Token synta
 
 ##### Enforcement
 
-TODO: ESLint rule. Code review.
+[ESLint rule: no-restricted-syntax](https://eslint.org/docs/rules/no-restricted-syntax). Code review.
 
 <!-- </rule> -->
 
@@ -992,7 +1008,7 @@ Code review.
 
 ##### Reason
 
-When copying a small `array`, using `Array#slice()` incurs a function overhead which outweighs benefits. Thus, a `for` loop is more efficient. For larger `arrays`, function cost is comparable to or less than loop cost in addition to the runtime engine being able to optimize for copying large chunks of memory. 
+When copying a small `array`, using `Array#slice()` incurs a function overhead which outweighs benefits. Thus, a `for` loop is more efficient. For larger `arrays`, function cost is comparable to or less than loop cost in addition to the runtime engine being able to optimize for copying large chunks of memory.
 
 ##### Small Array Example
 
@@ -1194,7 +1210,7 @@ var obj = {
 
 ##### Enforcement
 
-TODO: ESLint rule. Code review.
+[ESLint rules: no-restricted-syntax, object-shorthand](https://eslint.org/docs/rules/object-shorthand). Code review.
 
 <!-- </rule> -->
 
@@ -3423,7 +3439,7 @@ Testing, debugging, maintainability, composition, focused interfaces, and interc
 ##### Enforcement
 
 -   Look for parts of an implementation which can be extracted into reusable components.
--   Code review 
+-   Code review
 
 <!-- </rule> -->
 
