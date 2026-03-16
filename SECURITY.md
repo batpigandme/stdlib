@@ -18,6 +18,28 @@ limitations under the License.
 
 -->
 
+<!-- lint disable first-heading-level -->
+
+<!-- FIXME: the following two empty sections are merely to satisfy the linter for `expected-html-sections` which cannot, atm, be turned off -->
+
+<section class="usage">
+
+</section>
+
+<!-- /.usage -->
+
+<section class="examples">
+
+</section>
+
+<!-- /.examples -->
+
+<section class="links">
+
+</section>
+
+<!-- /.links -->
+
 # Security
 
 > Policy for reporting security vulnerabilities.
