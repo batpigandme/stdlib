@@ -42,11 +42,118 @@ limitations under the License.
 
 ## Introduction
 
-<!-- TODO -->
+Always abide by the **Law of Code Style Consistency**, or, in other words, _when in Rome, do as the Romans do_.
+
+While the code base to which you want to contribute may be a horrific mess in terms of aesthetic appearance and style, style consistency takes precedence over personal preference and canon. The more consistent a code base is in terms of style, the more readers of the code can focus on what the code does rather than deciphering changes in style.
+
+So, even if your peers commit various _faux pas_ outlined below, as long as you are contributing to their code base, abide by their conventions.
+
+A code base--module, repository, application, library, etc--should always appear to have a single author and not be a schizophrenic franken-mess. This stated, for those opportunities where you are the primary author, you should lead by example and write clean, readable, and testable code.
+
+Hopefully, most of the conventions outlined below will help enable you to do so.
+
+<!-- <rule-set> -->
+
+* * *
 
 ## General Principles
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Do one thing well
+
+##### Reason
+
+A function or module with a single, clearly defined purpose is easier to
+understand, test, and compose. Scope creep leads to functions which are
+difficult to reason about and hard to reuse.
+
+##### Bad Example
+
+```c
+// Do not...
+
+/**
+* Computes the absolute value of x and prints a debug message.
+*
+* @param x  input value
+* @return   absolute value of x
+*/
+double abs_and_log( const double x ) {
+	printf( "abs_and_log called with x = %f\n", x );
+	if ( x < 0.0 ) {
+		return -x;
+	}
+	return x;
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+
+/**
+* Computes the absolute value of a double-precision floating-point number.
+*
+* @param x  input value
+* @return   absolute value
+*/
+double stdlib_base_abs( const double x ) {
+	if ( x < 0.0 ) {
+		return -x;
+	}
+	return x;
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Prefer stdlib functions over system equivalents
+
+##### Reason
+
+stdlib provides implementations that are tested, consistent across platforms,
+and integrated with the project's dependency tracking and build infrastructure.
+Using raw system functions (e.g., `sqrt` from `<math.h>`) bypasses these
+guarantees and may produce platform-specific behavior.
+
+##### Bad Example
+
+```c
+// Do not...
+#include <math.h>
+
+double y = sqrt( x );
+```
+
+##### Good Example
+
+```c
+// Do...
+#include "stdlib/math/base/special/sqrt.h"
+
+double y = stdlib_base_sqrt( x );
+```
+
+##### Notes
+
+-   This ensures consistent behavior across platforms and allows stdlib's testing
+    infrastructure to validate all dependencies.
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- </rule-set> -->
 
 <!-- <rule-set> -->
 
