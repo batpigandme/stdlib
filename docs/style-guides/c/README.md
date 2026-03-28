@@ -1729,7 +1729,114 @@ Code review.
 
 ## Portability
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Use stdlib constants instead of `<math.h>` macros
+
+##### Reason
+
+Macros such as `INFINITY`, `NAN`, and `M_PI` are not guaranteed to exist in
+all C standards or on all compilers. Stdlib provides portable, tested
+alternatives that are guaranteed to resolve correctly across all supported
+platforms and build configurations.
+
+##### Bad Example
+
+```c
+// Do not...
+#include <math.h>
+
+double x = INFINITY;
+double y = NAN;
+```
+
+##### Good Example
+
+```c
+// Do...
+#include "stdlib/constants/float64/pinf.h"
+#include "stdlib/constants/float64/nan.h"
+
+double x = STDLIB_CONSTANT_FLOAT64_PINF;
+double y = STDLIB_CONSTANT_FLOAT64_NAN;
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `stdlib_base_sqrt()` and equivalent stdlib math functions over `<math.h>`
+
+##### Reason
+
+System math functions such as `sqrt()` and `fabs()` vary in behavior across
+platforms and may not correctly handle edge cases such as NaN, signed zero,
+or subnormal inputs. Stdlib replacements are consistently tested on all
+supported platforms and integrate with stdlib's dependency graph.
+
+##### Bad Example
+
+```c
+// Do not...
+#include <math.h>
+
+double y = sqrt( x );
+double z = fabs( x );
+```
+
+##### Good Example
+
+```c
+// Do...
+#include "stdlib/math/base/special/sqrt.h"
+#include "stdlib/math/base/special/abs.h"
+
+double y = stdlib_base_sqrt( x );
+double z = stdlib_base_abs( x );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `static const` for file-local constants
+
+##### Reason
+
+`static const` gives a constant internal linkage (preventing symbol
+collisions) and communicates its type to the compiler, enabling type checking.
+Object-like `#define` macros have no type, no scope, and no linkage, making
+them harder to debug and easier to misuse.
+
+##### Bad Example
+
+```c
+// Do not...
+#define ONE 1.0
+#define MAX_ITER 100
+```
+
+##### Good Example
+
+```c
+// Do...
+static const double ONE = 1.0;
+static const int32_t MAX_ITER = 100;
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
@@ -1739,7 +1846,168 @@ Code review.
 
 ## Node-API Addons
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Declare `addon()` functions `static`
+
+##### Reason
+
+The `addon` function is an implementation detail of the Node-API module and
+is never called directly from outside the translation unit. Marking it
+`static` gives it internal linkage, preventing symbol table pollution and
+potential conflicts with addon functions in other packages.
+
+##### Bad Example
+
+```c
+// Do not...
+napi_value addon( napi_env env, napi_callback_info info ) {
+    // ...
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+static napi_value addon( napi_env env, napi_callback_info info ) {
+    // ...
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `STDLIB_NAPI_ARGV*` macros for all argument extraction
+
+##### Reason
+
+Manually calling `napi_get_value_double`, `napi_get_value_int64`, or related
+Node-API functions is verbose, error-prone, and omits the bounds checking and
+error propagation that the `STDLIB_NAPI_ARGV*` macros provide. Using the
+macros ensures consistent argument validation and reduces boilerplate.
+
+##### Bad Example
+
+```c
+// Do not...
+static napi_value addon( napi_env env, napi_callback_info info ) {
+    size_t argc = 2;
+    napi_value argv[ 2 ];
+    napi_get_cb_info( env, info, &argc, argv, NULL, NULL );
+
+    double x;
+    napi_get_value_double( env, argv[ 0 ], &x );
+    // ...
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+static napi_value addon( napi_env env, napi_callback_info info ) {
+    STDLIB_NAPI_ARGV( env, info, argv, argc, 2 );
+    STDLIB_NAPI_ARGV_DOUBLE( env, x, argv, 0 );
+    // ...
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `STDLIB_NAPI_CREATE_*` macros for return values
+
+##### Reason
+
+The `STDLIB_NAPI_CREATE_*` macros wrap the corresponding `napi_create_*`
+functions and handle error propagation automatically. Using raw Node-API
+create functions requires explicit error checking that is easy to omit.
+
+##### Bad Example
+
+```c
+// Do not...
+napi_value result;
+napi_create_double( env, stdlib_base_abs( x ), &result );
+return result;
+```
+
+##### Good Example
+
+```c
+// Do...
+STDLIB_NAPI_CREATE_DOUBLE( env, stdlib_base_abs( x ), v );
+return v;
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Export addons with `STDLIB_NAPI_MODULE_EXPORT_FCN` or `_WITH_METHOD`
+
+##### Reason
+
+The `STDLIB_NAPI_MODULE_EXPORT_FCN` and `STDLIB_NAPI_MODULE_EXPORT_FCN_WITH_METHOD`
+macros register the addon function and generate the required `NAPI_MODULE`
+boilerplate. Using these macros ensures the module is registered correctly and
+consistently, and makes it easy to expose an optional `ndarray` method variant.
+
+##### Bad Example
+
+```c
+// Do not...
+NAPI_MODULE( NODE_GYP_MODULE_NAME, addon )
+```
+
+##### Good Example
+
+```c
+// Do... (function only)
+STDLIB_NAPI_MODULE_EXPORT_FCN( addon )
+
+// Do... (function + ndarray method)
+STDLIB_NAPI_MODULE_EXPORT_FCN_WITH_METHOD( addon, "ndarray", addon_method )
+```
+
+##### Notes
+
+-   The complete minimal addon pattern, sourced from `dapxsum/src/addon.c`:
+
+    ```c
+    static napi_value addon( napi_env env, napi_callback_info info ) {
+        STDLIB_NAPI_ARGV( env, info, argv, argc, 3 );
+        STDLIB_NAPI_ARGV_INT64( env, N, argv, 0 );
+        STDLIB_NAPI_ARGV_INT64( env, strideX, argv, 2 );
+        STDLIB_NAPI_ARGV_STRIDED_FLOAT64ARRAY( env, X, N, strideX, argv, 1 );
+        STDLIB_NAPI_CREATE_DOUBLE( env,
+            stdlib_strided_dsum( N, X, strideX ), v );
+        return v;
+    }
+
+    STDLIB_NAPI_MODULE_EXPORT_FCN( addon )
+    ```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
