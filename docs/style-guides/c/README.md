@@ -2015,15 +2015,31 @@ Code review.
 
 ## Additional Resources
 
-<!-- TODO -->
+-   [SEI CERT C Coding Standard][cert-c]
+-   [ISO C11 Standard][c11]
+-   [FreeBSD Kernel Style Guide][freebsd-style]
+-   [MISRA C][misra-c]
+-   [clib package manager][clib]
 
 * * *
 
 ## License
 
-<!-- TODO -->
+This document may be reused under a [Creative Commons Attribution-ShareAlike License][license].
 
 <section class="links">
+
+[cert-c]: https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard
+
+[c11]: https://www.iso.org/standard/57853.html
+
+[freebsd-style]: https://www.freebsd.org/cgi/man.cgi?query=style&sektion=9
+
+[misra-c]: https://www.misra.org.uk/misra-c/
+
+[clib]: https://github.com/clibs/clib
+
+[license]: https://creativecommons.org/licenses/by-sa/4.0/
 
 </section>
 
