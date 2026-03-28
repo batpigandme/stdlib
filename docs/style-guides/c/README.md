@@ -1365,7 +1365,232 @@ Code review.
 
 ## Comments
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Write a JSDoc-style `/** */` block comment above every public function
+
+##### Reason
+
+A block comment immediately above each public function serves as the
+authoritative documentation for that function. It is the source from which
+other documentation (READMEs, REPL help, TypeScript declarations) is derived,
+and it enables documentation tooling to extract structured information.
+
+##### Bad Example
+
+```c
+// Do not...
+// Computes the sum of a strided array.
+double API_SUFFIX(stdlib_strided_dapxsum)( const CBLAS_INT N,
+    const double alpha, const double *X, const CBLAS_INT strideX );
+```
+
+##### Good Example
+
+```c
+// Do...
+
+/**
+* Adds a scalar constant to each double-precision floating-point strided
+* array element and computes the sum.
+*
+* @param N        number of indexed elements
+* @param alpha    scalar constant
+* @param X        input array
+* @param strideX  stride length
+* @return         output value
+*/
+double API_SUFFIX(stdlib_strided_dapxsum)( const CBLAS_INT N,
+    const double alpha, const double *X, const CBLAS_INT strideX );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Include `@param` and `@return` tags with descriptions in function JSDoc
+
+##### Reason
+
+Parameter and return descriptions are the primary way consumers understand
+how to call a function without reading its implementation. Each `@param` tag
+must name the parameter and provide a brief description; `@return` must
+describe what the function returns.
+
+##### Bad Example
+
+```c
+// Do not...
+
+/**
+* Computes the absolute value.
+*
+* @param x
+* @return result
+*/
+double stdlib_base_abs( const double x );
+```
+
+##### Good Example
+
+```c
+// Do...
+
+/**
+* Computes the absolute value of a double-precision floating-point number.
+*
+* @param x   input value
+* @return    absolute value
+*/
+double stdlib_base_abs( const double x );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Include `## Method` and `## References` for non-trivial algorithms
+
+##### Reason
+
+Non-trivial numerical algorithms should document the mathematical method and
+cite the literature so that future maintainers can verify correctness, assess
+numerical stability, and update the implementation if better algorithms are
+found.
+
+##### Bad Example
+
+```c
+// Do not...
+
+/**
+* Computes the sum using an improved Kahan-Babuska algorithm.
+*
+* @param N        number of indexed elements
+* @param X        input array
+* @param strideX  stride length
+* @return         output value
+*/
+```
+
+##### Good Example
+
+```c
+// Do...
+
+/**
+* Computes the sum of double-precision floating-point strided array
+* elements using an improved Kahan-Babuska algorithm.
+*
+* ## Method
+*
+* -   This implementation uses an "improved Kahan-Babuska algorithm", as
+*     described by Neumaier (1974).
+*
+* ## References
+*
+* -   Neumaier, Arnold. 1974. "Rounding Error Analysis of Some Methods for
+*     Summing Finite Sums." _Zeitschrift Fur Angewandte Mathematik Und
+*     Mechanik_ 54 (1): 39-51.
+*
+* @param N        number of indexed elements
+* @param X        input array
+* @param strideX  stride length
+* @return         output value
+*/
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `//` for inline comments and `/* */` for multi-line non-doc blocks
+
+##### Reason
+
+Distinguishing between the two comment styles makes it easy to tell at a
+glance whether a comment is a short annotation (`//`) or a longer explanatory
+block (`/* */`). JSDoc `/** */` is reserved for documentation comments above
+declarations (see above).
+
+##### Bad Example
+
+```c
+// Do not...
+
+/* i is the loop counter */
+int32_t i;
+
+// This block handles the case where the stride is negative.
+// We compute a starting offset so that we iterate from the
+// logical beginning of the array to the end.
+CBLAS_INT ox = stdlib_strided_stride2offset( N, strideX );
+```
+
+##### Good Example
+
+```c
+// Do...
+
+// Loop counter:
+int32_t i;
+
+/*
+* Handle negative strides by computing the starting offset so that
+* we iterate from the logical beginning of the array to the end.
+*/
+CBLAS_INT ox = stdlib_strided_stride2offset( N, strideX );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Include a space after `//`
+
+##### Reason
+
+A space between `//` and the comment text is required for readability and
+matches the style used throughout the stdlib codebase. Comments without a
+leading space look like commented-out code.
+
+##### Bad Example
+
+```c
+// Do not...
+//loop counter
+//returns NaN for invalid inputs
+```
+
+##### Good Example
+
+```c
+// Do...
+// Loop counter.
+// Returns NaN for invalid inputs.
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
@@ -1375,7 +1600,126 @@ Code review.
 
 ## Error Handling
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Return `0.0/0.0` for invalid floating-point inputs; never call `abort()`
+
+##### Reason
+
+A numerical library function must not terminate the calling process. Returning
+NaN (produced by the expression `0.0/0.0`) propagates the error signal through
+subsequent floating-point computations in a way the caller can detect and
+handle. Calling `abort()` or `exit()` is unconditionally forbidden.
+
+##### Bad Example
+
+```c
+// Do not...
+double stdlib_base_ln( const double x ) {
+    if ( x < 0.0 ) {
+        abort();
+    }
+    // ...
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+double stdlib_base_ln( const double x ) {
+    if ( x < 0.0 ) {
+        return 0.0/0.0;
+    }
+    // ...
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Return early for out-of-range arguments
+
+##### Reason
+
+Detecting invalid arguments at the entry point of a function avoids executing
+the function body on nonsensical inputs and makes the error path explicit and
+easy to find during code review.
+
+##### Bad Example
+
+```c
+// Do not...
+double API_SUFFIX(stdlib_strided_dapxsumkbn_ndarray)( const CBLAS_INT N,
+    const double alpha, const double *X, const CBLAS_INT strideX,
+    const CBLAS_INT offsetX ) {
+    return ( N * alpha ) +
+        API_SUFFIX(stdlib_strided_dsumkbn_ndarray)( N, X, strideX, offsetX );
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+double API_SUFFIX(stdlib_strided_dapxsumkbn_ndarray)( const CBLAS_INT N,
+    const double alpha, const double *X, const CBLAS_INT strideX,
+    const CBLAS_INT offsetX ) {
+    if ( N <= 0 ) {
+        return 0.0;
+    }
+    return ( N * alpha ) +
+        API_SUFFIX(stdlib_strided_dsumkbn_ndarray)( N, X, strideX, offsetX );
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `stdlib_base_is_nan()` instead of `x != x` to test for NaN
+
+##### Reason
+
+Relying on the identity `x != x` to detect NaN is a well-known C idiom, but
+it is less readable than an explicit predicate and may be optimized away by
+compilers that assume IEEE 754 arithmetic. `stdlib_base_is_nan()` is tested,
+documented, and immediately self-explanatory.
+
+##### Bad Example
+
+```c
+// Do not...
+if ( x != x ) {
+    return 0.0/0.0;
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+#include "stdlib/math/base/assert/is_nan.h"
+
+if ( stdlib_base_is_nan( x ) ) {
+    return 0.0/0.0;
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
