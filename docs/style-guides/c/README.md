@@ -161,7 +161,235 @@ Code review.
 
 ## Whitespace
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Use tab indentation
+
+##### Reason
+
+Tabs allow each developer to configure their editor to display indentation at
+their preferred visual width without affecting the shared source file. Mixing
+tabs and spaces produces inconsistent results across editors and tools.
+
+##### Bad Example
+
+```c
+// Do not...
+double stdlib_base_abs( const double x ) {
+    if ( x < 0.0 ) {
+        return -x;
+    }
+    return x;
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+double stdlib_base_abs( const double x ) {
+	if ( x < 0.0 ) {
+		return -x;
+	}
+	return x;
+}
+```
+
+##### Enforcement
+
+`.editorconfig`
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Include spaces around binary operators
+
+##### Reason
+
+Spaces around operators improve readability by making it clear that two
+operands are being combined rather than running together into a single token.
+
+##### Bad Example
+
+```c
+// Do not...
+double y = x*s;
+double z = a+b*c;
+```
+
+##### Good Example
+
+```c
+// Do...
+double y = x * s;
+double z = a + b * c;
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Include spaces inside control-flow parentheses
+
+##### Reason
+
+Consistent with the stdlib JavaScript style and improves readability by
+visually separating the condition from the parentheses.
+
+##### Bad Example
+
+```c
+// Do not...
+if(N <= 0) {
+	return 0.0;
+}
+for(i = 0; i < N; i++) {
+	// ...
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+if ( N <= 0 ) {
+	return 0.0;
+}
+for ( i = 0; i < N; i++ ) {
+	// ...
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Include a space after comment markers
+
+##### Reason
+
+A space between `//` and the comment text is required for readability and is
+consistent with the style used throughout the stdlib codebase.
+
+##### Bad Example
+
+```c
+// Do not...
+//compute the sum
+//returns NaN for invalid inputs
+```
+
+##### Good Example
+
+```c
+// Do...
+// Compute the sum.
+// Returns NaN for invalid inputs.
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Separate variable declarations from the first statement with a blank line
+
+##### Reason
+
+A blank line after the variable declaration block makes it immediately clear
+where declarations end and executable code begins, reducing visual noise.
+
+##### Bad Example
+
+```c
+// Do not...
+double stdlib_base_abs( const double x ) {
+	double s;
+	double y;
+	s = 10.0;
+	y = x * s;
+	return y;
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+double stdlib_base_abs( const double x ) {
+	double s;
+	double y;
+
+	s = 10.0;
+	y = x * s;
+	return y;
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Precede section header comments with two blank lines
+
+##### Reason
+
+Section header comments (e.g., `// MAIN //`, `// VARIABLES //`) delimit
+logical regions of a file. Two blank lines create a stronger visual break
+than a single blank line, making it easier to navigate the file.
+
+##### Bad Example
+
+```c
+// Do not...
+// VARIABLES //
+
+static const double ONE = 1.0;
+
+// MAIN //
+
+double stdlib_base_abs( const double x ) {
+	// ...
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+// VARIABLES //
+
+static const double ONE = 1.0;
+
+
+// MAIN //
+
+double stdlib_base_abs( const double x ) {
+	// ...
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
