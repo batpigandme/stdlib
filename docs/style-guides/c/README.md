@@ -18,6 +18,8 @@ limitations under the License.
 
 -->
 
+<!-- lint disable expected-html-sections -->
+
 # C Style Guide
 
 > _An opinionated style guide for writing C._
@@ -80,11 +82,11 @@ difficult to reason about and hard to reuse.
 * @return   absolute value of x
 */
 double abs_and_log( const double x ) {
-	printf( "abs_and_log called with x = %f\n", x );
-	if ( x < 0.0 ) {
-		return -x;
-	}
-	return x;
+    printf( "abs_and_log called with x = %f\n", x );
+    if ( x < 0.0 ) {
+        return -x;
+    }
+    return x;
 }
 ```
 
@@ -100,10 +102,10 @@ double abs_and_log( const double x ) {
 * @return   absolute value
 */
 double stdlib_base_abs( const double x ) {
-	if ( x < 0.0 ) {
-		return -x;
-	}
-	return x;
+    if ( x < 0.0 ) {
+        return -x;
+    }
+    return x;
 }
 ```
 
@@ -188,10 +190,10 @@ double stdlib_base_abs( const double x ) {
 ```c
 // Do...
 double stdlib_base_abs( const double x ) {
-	if ( x < 0.0 ) {
-		return -x;
-	}
-	return x;
+    if ( x < 0.0 ) {
+        return -x;
+    }
+    return x;
 }
 ```
 
@@ -246,10 +248,10 @@ visually separating the condition from the parentheses.
 ```c
 // Do not...
 if(N <= 0) {
-	return 0.0;
+    return 0.0;
 }
 for(i = 0; i < N; i++) {
-	// ...
+    // ...
 }
 ```
 
@@ -258,10 +260,10 @@ for(i = 0; i < N; i++) {
 ```c
 // Do...
 if ( N <= 0 ) {
-	return 0.0;
+    return 0.0;
 }
 for ( i = 0; i < N; i++ ) {
-	// ...
+    // ...
 }
 ```
 
@@ -316,11 +318,11 @@ where declarations end and executable code begins, reducing visual noise.
 ```c
 // Do not...
 double stdlib_base_abs( const double x ) {
-	double s;
-	double y;
-	s = 10.0;
-	y = x * s;
-	return y;
+    double s;
+    double y;
+    s = 10.0;
+    y = x * s;
+    return y;
 }
 ```
 
@@ -329,12 +331,12 @@ double stdlib_base_abs( const double x ) {
 ```c
 // Do...
 double stdlib_base_abs( const double x ) {
-	double s;
-	double y;
+    double s;
+    double y;
 
-	s = 10.0;
-	y = x * s;
-	return y;
+    s = 10.0;
+    y = x * s;
+    return y;
 }
 ```
 
@@ -365,7 +367,7 @@ static const double ONE = 1.0;
 // MAIN //
 
 double stdlib_base_abs( const double x ) {
-	// ...
+    // ...
 }
 ```
 
@@ -381,7 +383,7 @@ static const double ONE = 1.0;
 // MAIN //
 
 double stdlib_base_abs( const double x ) {
-	// ...
+    // ...
 }
 ```
 
@@ -399,7 +401,133 @@ Code review.
 
 ## File Structure
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Begin every file with an Apache-2.0 license block
+
+##### Reason
+
+All stdlib source files must carry an explicit copyright notice and license
+declaration. This protects contributors and consumers, and is a project
+requirement for all committed files.
+
+##### Bad Example
+
+```c
+// Do not...
+#ifndef STDLIB_MATH_BASE_SPECIAL_ABS_H
+#define STDLIB_MATH_BASE_SPECIAL_ABS_H
+
+double stdlib_base_abs( const double x );
+
+#endif // !STDLIB_MATH_BASE_SPECIAL_ABS_H
+```
+
+##### Good Example
+
+```c
+// Do...
+
+/**
+* @license Apache-2.0
+*
+* Copyright (c) 2026 The Stdlib Authors.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*    http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+#ifndef STDLIB_MATH_BASE_SPECIAL_ABS_H
+#define STDLIB_MATH_BASE_SPECIAL_ABS_H
+
+double stdlib_base_abs( const double x );
+
+#endif // !STDLIB_MATH_BASE_SPECIAL_ABS_H
+```
+
+##### Enforcement
+
+`make lint-license-headers`
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Order includes: own header first, then stdlib headers, then system headers
+
+##### Reason
+
+Including a file's own header first ensures that the header is self-contained
+(i.e., it does not silently depend on includes from other translation units).
+Placing system headers last prevents system macros from polluting the stdlib
+namespace.
+
+##### Bad Example
+
+```c
+// Do not...
+#include <stdint.h>
+#include "stdlib/blas/base/shared.h"
+#include "stdlib/blas/ext/base/dapxsum.h"
+```
+
+##### Good Example
+
+```c
+// Do...
+#include "stdlib/blas/ext/base/dapxsum.h"
+#include "stdlib/blas/base/shared.h"
+#include <stdint.h>
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: All files must end with a single trailing newline
+
+##### Reason
+
+POSIX defines a text file as a sequence of lines, each terminated by a
+newline character. Missing or multiple trailing newlines cause noisy diffs
+and may confuse tools that process text files.
+
+##### Bad Example
+
+```c
+// Do not... (no trailing newline, or multiple trailing newlines)
+double stdlib_base_abs( const double x ) {
+    return ( x < 0.0 ) ? -x : x;
+}
+```
+
+##### Good Example
+
+```c
+// Do... (exactly one newline at end of file)
+double stdlib_base_abs( const double x ) {
+    return ( x < 0.0 ) ? -x : x;
+}
+```
+
+##### Enforcement
+
+`.editorconfig`
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
@@ -409,7 +537,128 @@ Code review.
 
 ## Include Guards
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Use `#ifndef` / `#define` / `#endif` include guards in all headers
+
+##### Reason
+
+Include guards prevent a header from being processed more than once per
+translation unit, avoiding duplicate definition errors when headers are
+transitively included from multiple files.
+
+##### Bad Example
+
+```c
+// Do not...
+// (header with no include guard)
+#include "stdlib/blas/base/shared.h"
+
+double stdlib_base_abs( const double x );
+```
+
+##### Good Example
+
+```c
+// Do...
+#ifndef STDLIB_MATH_BASE_SPECIAL_ABS_H
+#define STDLIB_MATH_BASE_SPECIAL_ABS_H
+
+#include "stdlib/blas/base/shared.h"
+
+double stdlib_base_abs( const double x );
+
+#endif // !STDLIB_MATH_BASE_SPECIAL_ABS_H
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Name guard macros `STDLIB_<DOMAIN>_<PATH>_H`
+
+##### Reason
+
+A consistent, globally unique macro name derived from the file's path prevents
+accidental collisions between guards in different packages.
+
+##### Bad Example
+
+```c
+// Do not...
+#ifndef MY_HEADER_H
+#define MY_HEADER_H
+// ...
+#endif
+```
+
+##### Good Example
+
+```c
+// Do...
+#ifndef STDLIB_BLAS_EXT_BASE_DAPXSUM_H
+#define STDLIB_BLAS_EXT_BASE_DAPXSUM_H
+// ...
+#endif // !STDLIB_BLAS_EXT_BASE_DAPXSUM_H
+```
+
+##### Notes
+
+-   Convert the header's path relative to the `include/` directory to
+    uppercase and replace `/` and `.` with `_`.
+
+-   For example, `include/stdlib/blas/ext/base/dapxsum.h` becomes
+    `STDLIB_BLAS_EXT_BASE_DAPXSUM_H`.
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Close `#endif` with a `// !STDLIB_..._H` comment
+
+##### Reason
+
+`#endif` directives at the end of long header files can be hard to associate
+with their matching `#ifndef`. A trailing comment makes the relationship
+explicit and helps readers verify that the guard is correctly closed.
+
+##### Bad Example
+
+```c
+// Do not...
+#ifndef STDLIB_BLAS_EXT_BASE_DAPXSUM_H
+#define STDLIB_BLAS_EXT_BASE_DAPXSUM_H
+
+// ...
+
+#endif
+```
+
+##### Good Example
+
+```c
+// Do...
+#ifndef STDLIB_BLAS_EXT_BASE_DAPXSUM_H
+#define STDLIB_BLAS_EXT_BASE_DAPXSUM_H
+
+// ...
+
+#endif // !STDLIB_BLAS_EXT_BASE_DAPXSUM_H
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
@@ -508,3 +757,5 @@ Code review.
 <section class="links">
 
 </section>
+
+<!-- /.links -->
