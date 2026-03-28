@@ -668,7 +668,93 @@ Code review.
 
 ## C++ Compatibility
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Wrap public header declarations in `extern "C"` guards
+
+##### Reason
+
+When a C header is included in a C++ translation unit, the C++ compiler will
+mangle function names by default. Wrapping declarations in `extern "C"`
+prevents name mangling, allowing C++ code to link against C implementations
+without errors.
+
+##### Bad Example
+
+```c
+// Do not...
+#ifndef STDLIB_MATH_BASE_SPECIAL_ABS_H
+#define STDLIB_MATH_BASE_SPECIAL_ABS_H
+
+double stdlib_base_abs( const double x );
+
+#endif // !STDLIB_MATH_BASE_SPECIAL_ABS_H
+```
+
+##### Good Example
+
+```c
+// Do...
+#ifndef STDLIB_MATH_BASE_SPECIAL_ABS_H
+#define STDLIB_MATH_BASE_SPECIAL_ABS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+double stdlib_base_abs( const double x );
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // !STDLIB_MATH_BASE_SPECIAL_ABS_H
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `#ifdef __cplusplus` to guard `extern "C"` blocks
+
+##### Reason
+
+The `extern "C"` syntax is not valid C. Guarding it with `#ifdef __cplusplus`
+ensures the header remains valid C while also being safe to include from C++.
+
+##### Bad Example
+
+```c
+// Do not...
+extern "C" {
+double stdlib_base_abs( const double x );
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+double stdlib_base_abs( const double x );
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
@@ -678,7 +764,220 @@ Code review.
 
 ## Variables and Types
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Declare all variables at the top of their scope
+
+##### Reason
+
+Stdlib C targets C89 compatibility, which requires all variable declarations
+to precede any statements within a block. Declaring variables at the top of
+the function also makes it easy to see at a glance what values a function
+manages.
+
+##### Bad Example
+
+```c
+// Do not...
+double stdlib_base_abs( const double x ) {
+    if ( x < 0.0 ) {
+        double y = -x;
+        return y;
+    }
+    return x;
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+double stdlib_base_abs( const double x ) {
+    double y;
+
+    if ( x < 0.0 ) {
+        y = -x;
+        return y;
+    }
+    return x;
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Declare one variable per line
+
+##### Reason
+
+Declaring multiple variables on a single line makes the code harder to read
+and complicates adding per-variable comments or annotations in the future.
+
+##### Bad Example
+
+```c
+// Do not...
+double x, y, z;
+int32_t i, n;
+```
+
+##### Good Example
+
+```c
+// Do...
+double x;
+double y;
+double z;
+int32_t i;
+int32_t n;
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use fixed-width integer types
+
+##### Reason
+
+The sizes of `int`, `long`, and related types are platform-defined. Using
+fixed-width types from `<stdint.h>` (e.g., `int32_t`, `int64_t`, `uint32_t`)
+produces portable code whose integer sizes are guaranteed regardless of the
+target platform or compiler.
+
+##### Bad Example
+
+```c
+// Do not...
+int n = 100;
+long offset = 0;
+unsigned int count = 0;
+```
+
+##### Good Example
+
+```c
+// Do...
+int32_t n = 100;
+int64_t offset = 0;
+uint32_t count = 0;
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `CBLAS_INT` for array indices and counts in BLAS contexts
+
+##### Reason
+
+BLAS interfaces may be compiled with either 32-bit or 64-bit integer support.
+`CBLAS_INT` is an alias that resolves to the correct integer type for the
+current build configuration, ensuring compatibility with both ILP64 and LP64
+BLAS builds.
+
+##### Bad Example
+
+```c
+// Do not...
+double stdlib_strided_dsum( const int N, const double *X, const int strideX );
+```
+
+##### Good Example
+
+```c
+// Do...
+double API_SUFFIX(stdlib_strided_dsum)( const CBLAS_INT N, const double *X, const CBLAS_INT strideX );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use the `f` suffix on single-precision floating-point literals
+
+##### Reason
+
+An unsuffixed floating-point literal such as `1.0` has type `double`. Assigning
+or operating on a `float` variable with a `double` literal causes an implicit
+promotion to `double` and then a truncation back to `float`, which may
+introduce subtle precision differences and prevents the compiler from using
+single-precision instructions.
+
+##### Bad Example
+
+```c
+// Do not... (silently promotes to double, then truncates)
+float x = 1.0;
+float y = x + 0.5;
+```
+
+##### Good Example
+
+```c
+// Do...
+float x = 1.0f;
+float y = x + 0.5f;
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Declare variables in order of decreasing name length
+
+##### Reason
+
+Declaring variables in decreasing order of name length produces a natural
+alignment of the identifiers and their types without requiring manual spacing,
+making the declaration block easier to scan.
+
+##### Bad Example
+
+```c
+// Do not...
+CBLAS_INT strideX;
+double alpha;
+CBLAS_INT N;
+CBLAS_INT ox;
+```
+
+##### Good Example
+
+```c
+// Do...
+CBLAS_INT strideX;
+CBLAS_INT ox;
+CBLAS_INT N;
+double alpha;
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
