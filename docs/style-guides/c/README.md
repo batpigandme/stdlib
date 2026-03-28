@@ -987,7 +987,206 @@ Code review.
 
 ## Naming
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Prefix all public functions with `stdlib_`
+
+##### Reason
+
+A consistent top-level namespace prefix prevents symbol collisions with the
+C standard library, user code, and third-party libraries when stdlib is linked
+into a larger application.
+
+##### Bad Example
+
+```c
+// Do not...
+double base_abs( const double x );
+double abs_double( const double x );
+```
+
+##### Good Example
+
+```c
+// Do...
+double stdlib_base_abs( const double x );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Prefix strided array operation functions with `stdlib_strided_`
+
+##### Reason
+
+The `stdlib_strided_` prefix identifies functions that operate on strided
+memory regions and signals to readers that the function accepts stride and
+offset parameters following the stdlib strided array convention.
+
+##### Bad Example
+
+```c
+// Do not...
+double dapxsum( const CBLAS_INT N, const double alpha,
+    const double *X, const CBLAS_INT strideX );
+```
+
+##### Good Example
+
+```c
+// Do...
+double API_SUFFIX(stdlib_strided_dapxsum)( const CBLAS_INT N,
+    const double alpha, const double *X, const CBLAS_INT strideX );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Prefix base math operation functions with `stdlib_base_`
+
+##### Reason
+
+The `stdlib_base_` prefix identifies scalar (element-wise) mathematical
+functions and separates them from higher-level strided or statistical routines.
+
+##### Bad Example
+
+```c
+// Do not...
+double special_abs( const double x );
+double math_sqrt( const double x );
+```
+
+##### Good Example
+
+```c
+// Do...
+double stdlib_base_abs( const double x );
+double stdlib_base_sqrt( const double x );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `API_SUFFIX( name )` for BLAS and LAPACK function names
+
+##### Reason
+
+Some BLAS/LAPACK builds use 64-bit integers (ILP64). The `API_SUFFIX` macro
+appends `_64` to the function name when building for ILP64 and expands to
+nothing for the default LP64 build. Wrapping every public BLAS/LAPACK symbol
+with `API_SUFFIX` ensures the compiled binary exports the correct name for
+the target integer model without requiring source changes.
+
+##### Bad Example
+
+```c
+// Do not...
+double stdlib_strided_dapxsum( const CBLAS_INT N, const double alpha,
+    const double *X, const CBLAS_INT strideX );
+```
+
+##### Good Example
+
+```c
+// Do...
+// API_SUFFIX appends `_64` when building for ILP64 CBLAS:
+double API_SUFFIX(stdlib_strided_dapxsum)( const CBLAS_INT N,
+    const double alpha, const double *X, const CBLAS_INT strideX );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Declare file-local helper functions `static`
+
+##### Reason
+
+Marking internal helpers `static` gives them internal linkage, preventing
+their symbols from being exported and clashing with identically named
+functions in other translation units.
+
+##### Bad Example
+
+```c
+// Do not...
+double compute_offset( const CBLAS_INT N, const CBLAS_INT stride ) {
+    // ...
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+static double compute_offset( const CBLAS_INT N, const CBLAS_INT stride ) {
+    // ...
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use underscores to separate words in identifiers
+
+##### Reason
+
+Stdlib C identifiers follow the C standard library convention of using `_`
+as a word separator (snake_case). camelCase is a JavaScript convention and
+should not appear in C identifiers.
+
+##### Bad Example
+
+```c
+// Do not...
+double strideX;
+int32_t numElements;
+```
+
+##### Good Example
+
+```c
+// Do...
+double stride_x;
+int32_t num_elements;
+```
+
+##### Notes
+
+-   BLAS parameter names such as `strideX` are an established exception: they
+    follow the BLAS naming convention and are used verbatim throughout the
+    codebase for consistency with BLAS documentation.
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
@@ -997,7 +1196,166 @@ Code review.
 
 ## Functions
 
-<!-- TODO -->
+<!-- <rule> -->
+
+### Rule: Return early when `N <= 0`
+
+##### Reason
+
+Strided array functions are undefined for zero or negative element counts.
+An early return avoids entering a loop or performing work on an empty array,
+and matches the behavior expected by BLAS-compatible callers.
+
+##### Bad Example
+
+```c
+// Do not...
+double API_SUFFIX(stdlib_strided_dsum)( const CBLAS_INT N,
+    const double *X, const CBLAS_INT strideX ) {
+    CBLAS_INT i;
+    double sum;
+
+    sum = 0.0;
+    for ( i = 0; i < N; i++ ) {
+        sum += X[ i * strideX ];
+    }
+    return sum;
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+double API_SUFFIX(stdlib_strided_dsum)( const CBLAS_INT N,
+    const double *X, const CBLAS_INT strideX ) {
+    CBLAS_INT i;
+    double sum;
+
+    if ( N <= 0 ) {
+        return 0.0;
+    }
+    sum = 0.0;
+    for ( i = 0; i < N; i++ ) {
+        sum += X[ i * strideX ];
+    }
+    return sum;
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Return `0.0/0.0` (NaN) for invalid floating-point inputs
+
+##### Reason
+
+Returning NaN propagates the error signal through subsequent floating-point
+computations without terminating the program. Calling `abort()` or similar
+functions is not acceptable in a numerical library where callers must be able
+to detect and handle invalid inputs gracefully.
+
+##### Bad Example
+
+```c
+// Do not...
+double stdlib_base_sqrt( const double x ) {
+    if ( x < 0.0 ) {
+        abort();
+    }
+    // ...
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+double stdlib_base_sqrt( const double x ) {
+    if ( x < 0.0 ) {
+        return 0.0/0.0;
+    }
+    // ...
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `const` for pointer parameters that are not modified
+
+##### Reason
+
+Marking a pointer parameter `const` documents the function's contract (it
+will not modify the pointed-to data) and allows the compiler to apply
+additional optimizations. It also enables the function to accept pointers to
+constant data without a cast.
+
+##### Bad Example
+
+```c
+// Do not...
+double API_SUFFIX(stdlib_strided_dsum)( const CBLAS_INT N,
+    double *X, const CBLAS_INT strideX );
+```
+
+##### Good Example
+
+```c
+// Do...
+double API_SUFFIX(stdlib_strided_dsum)( const CBLAS_INT N,
+    const double *X, const CBLAS_INT strideX );
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Place the opening brace on the same line as the function signature
+
+##### Reason
+
+Consistent brace placement eliminates debates over style and matches the
+opening-brace convention used throughout the stdlib C codebase.
+
+##### Bad Example
+
+```c
+// Do not...
+double stdlib_base_abs( const double x )
+{
+    return ( x < 0.0 ) ? -x : x;
+}
+```
+
+##### Good Example
+
+```c
+// Do...
+double stdlib_base_abs( const double x ) {
+    return ( x < 0.0 ) ? -x : x;
+}
+```
+
+##### Enforcement
+
+Code review.
+
+<!-- </rule> -->
 
 <!-- </rule-set> -->
 
