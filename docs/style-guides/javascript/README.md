@@ -50,8 +50,13 @@ limitations under the License.
 24. [Modularity](#modularity)
 25. [Client-side JavaScript](#client-side-javascript)
 26. [Dependencies](#dependencies)
-27. [Additional Resources](#additional-resources)
-28. [License](#license)
+27. [Best Practices](#best-practices)
+28. [Code Complexity](#code-complexity)
+29. [Node.js Conventions](#nodejs-conventions)
+30. [ES2015 Restrictions](#es2015-restrictions)
+31. [stdlib Custom Rules](#stdlib-custom-rules)
+32. [Additional Resources](#additional-resources)
+33. [License](#license)
 
 ## Introduction
 
@@ -134,7 +139,7 @@ function query() {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`space-before-blocks`][eslint-space-before-blocks]
 
 <!-- </rule> -->
 
@@ -168,7 +173,7 @@ function test( arg1, arg2, arg3 ) {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rules: [`comma-spacing`][eslint-comma-spacing], [`space-in-parens`][eslint-space-in-parens]
 
 <!-- </rule> -->
 
@@ -205,7 +210,7 @@ var foo = bar[ 10 ];
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`computed-property-spacing`][eslint-computed-property-spacing]
 
 <!-- </rule> -->
 
@@ -245,7 +250,7 @@ var a = 1 + 1;
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`space-infix-ops`][eslint-space-infix-ops]
 
 <!-- </rule> -->
 
@@ -279,7 +284,7 @@ z = z++;
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`space-unary-ops`][eslint-space-unary-ops]
 
 <!-- </rule> -->
 
@@ -321,7 +326,7 @@ Including `1` space after comment marks improves readability.
 
 ##### Enforcement
 
-TODO
+ESLint rule: [`spaced-comment`][eslint-spaced-comment]
 
 <!-- </rule> -->
 
@@ -531,7 +536,7 @@ default:
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`indent`][eslint-indent]
 
 <!-- </rule> -->
 
@@ -569,7 +574,7 @@ var bar = foo();
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`semi`][eslint-semi]
 
 <!-- </rule> -->
 
@@ -658,7 +663,7 @@ function myFunction() {
 
 ##### Enforcement
 
-TODO: ESLint rule (and code review)
+ESLint rule: [`vars-on-top`][eslint-vars-on-top]. Code review.
 
 <!-- </rule> -->
 
@@ -694,7 +699,7 @@ var foo = 3;
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`one-var`][eslint-one-var]
 
 <!-- </rule> -->
 
@@ -729,7 +734,7 @@ var i;
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`max-statements-per-line`][eslint-max-statements-per-line]
 
 <!-- </rule> -->
 
@@ -837,7 +842,7 @@ var str = 'Hello';
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`quotes`][eslint-quotes]
 
 <!-- </rule> -->
 
@@ -855,7 +860,7 @@ Immediate evaluation prevents a template being stored in a variable. Token synta
 
 ##### Enforcement
 
-TODO: ESLint rule. Code review.
+ESLint rule: [`no-restricted-syntax`][eslint-no-restricted-syntax]. Code review.
 
 <!-- </rule> -->
 
@@ -1153,7 +1158,7 @@ var obj = {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`comma-dangle`][eslint-comma-dangle]
 
 <!-- <rule> -->
 
@@ -1194,7 +1199,7 @@ var obj = {
 
 ##### Enforcement
 
-TODO: ESLint rule. Code review.
+ESLint rule: [`object-shorthand`][eslint-object-shorthand]. Code review.
 
 <!-- </rule> -->
 
@@ -1236,7 +1241,7 @@ function beep() {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`func-style`][eslint-func-style]
 
 <!-- </rule> -->
 
@@ -1380,7 +1385,7 @@ if ( i < 11 ) {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rules: [`no-loop-func`][eslint-no-loop-func], [`no-inner-declarations`][eslint-no-inner-declarations]
 
 <!-- </rule> -->
 
@@ -1416,7 +1421,7 @@ function init() {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`wrap-iife`][eslint-wrap-iife]
 
 <!-- </rule> -->
 
@@ -1489,7 +1494,7 @@ function getEquation( a, b, c ) {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`stdlib/no-unnecessary-nested-functions`][eslint-stdlib-no-unnecessary-nested-functions]. Code review.
 
 <!-- </rule> -->
 
@@ -1765,7 +1770,7 @@ beep( boop );
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`func-names`][eslint-func-names]
 
 <!-- </rule> -->
 
@@ -1809,7 +1814,7 @@ NaN = null; // throws an Error
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`strict`][eslint-strict]
 
 <!-- </rule> -->
 
@@ -1857,7 +1862,7 @@ function fcn() {
 
 ##### Enforcement
 
-TODO: ESLint rule
+Code review.
 
 <!-- </rule> -->
 
@@ -1909,7 +1914,7 @@ function fcn( value, options ) {
 
 ##### Enforcement
 
-TODO: ESLint rule
+Code review.
 
 <!-- </rule> -->
 
@@ -2070,7 +2075,7 @@ function beep() {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`curly`][eslint-curly]
 
 <!-- </rule> -->
 
@@ -2112,7 +2117,7 @@ function query() {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`brace-style`][eslint-brace-style]
 
 <!-- </rule> -->
 
@@ -2232,7 +2237,7 @@ if ( foo === bar ) {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`eqeqeq`][eslint-eqeqeq]
 
 <!-- </rule> -->
 
@@ -2583,7 +2588,7 @@ function transform( str ) {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rules: [`require-jsdoc`][eslint-require-jsdoc], [`valid-jsdoc`][eslint-valid-jsdoc]
 
 <!-- </rule> -->
 
@@ -2633,7 +2638,7 @@ var foo = bar || null;
 
 ##### Enforcement
 
-Code review. TODO: ESLint rule (?).
+ESLint rule: [`stdlib/empty-line-before-comment`][eslint-stdlib-empty-line-before-comment]. Code review.
 
 <!-- </rule> -->
 
@@ -2778,7 +2783,7 @@ var myInstance = new Ctor();
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`camelcase`][eslint-camelcase]
 
 <!-- </rule> -->
 
@@ -2816,7 +2821,7 @@ var robo = new RoboRobot();
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`new-cap`][eslint-new-cap]
 
 <!-- </rule> -->
 
@@ -2851,7 +2856,7 @@ function Robot() {
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`no-underscore-dangle`][eslint-no-underscore-dangle]
 
 <!-- </rule> -->
 
@@ -2920,7 +2925,7 @@ var out = arr.map( square );
 
 ##### Enforcement
 
-TODO: ESLint rule
+ESLint rule: [`func-names`][eslint-func-names]
 
 <!-- </rule> -->
 
@@ -3002,7 +3007,7 @@ function Robot( name ) {
 
 ##### Enforcement
 
-TODO: ESLint rule (?)
+ESLint rule: [`consistent-this`][eslint-consistent-this]
 
 <!-- </rule> -->
 
@@ -3595,6 +3600,1845 @@ Code review.
 
 <!-- </rule-set> -->
 
+<!-- <rule-set> -->
+
+* * *
+
+## Best Practices
+
+<!-- <rule> -->
+
+### Rule: No eval
+
+##### Reason
+
+`eval` introduces security risks and makes code harder to debug and optimize.
+
+##### Enforcement
+
+ESLint rule: [`no-eval`][eslint-no-eval]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No extending native prototypes
+
+##### Reason
+
+Modifying native prototypes can cause unexpected behavior for other code that depends on them.
+
+##### Enforcement
+
+ESLint rule: [`no-extend-native`][eslint-no-extend-native]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Guard for-in loops
+
+##### Reason
+
+`for...in` iterates over inherited properties. Always use `hasOwnProperty` to filter.
+
+##### Bad Example
+
+<!-- eslint-disable guard-for-in -->
+
+```javascript
+// Do not...
+var key;
+for ( key in obj ) {
+    console.log( key );
+}
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var key;
+for ( key in obj ) {
+    if ( hasOwnProp( obj, key ) ) {
+        console.log( key );
+    }
+}
+```
+
+##### Enforcement
+
+ESLint rule: [`guard-for-in`][eslint-guard-for-in]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Switch statements must have a default case
+
+##### Reason
+
+Ensures all branches are handled explicitly. The default case should be last.
+
+##### Enforcement
+
+ESLint rules: [`default-case`][eslint-default-case], [`default-case-last`][eslint-default-case-last]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Throw Error objects, not literals
+
+##### Reason
+
+Error objects capture a stack trace, which is essential for debugging.
+
+##### Bad Example
+
+<!-- eslint-disable no-throw-literal -->
+
+```javascript
+// Do not...
+throw 'error';
+throw 0;
+throw { 'message': 'error' };
+```
+
+##### Good Example
+
+```javascript
+// Do...
+throw new Error( 'something went wrong.' );
+throw new TypeError( 'invalid argument. Must provide a string.' );
+```
+
+##### Enforcement
+
+ESLint rule: [`no-throw-literal`][eslint-no-throw-literal]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Always provide radix to parseInt
+
+##### Reason
+
+Omitting the radix can lead to unexpected results, especially with strings starting with `0`.
+
+##### Bad Example
+
+<!-- eslint-disable radix -->
+
+```javascript
+// Do not...
+var num = parseInt( '071' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var num = parseInt( '071', 10 );
+```
+
+##### Enforcement
+
+ESLint rule: [`radix`][eslint-radix]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No floating decimal points
+
+##### Reason
+
+Floating decimal points make numbers harder to distinguish from the `.` operator.
+
+##### Bad Example
+
+<!-- eslint-disable no-floating-decimal -->
+
+```javascript
+// Do not...
+var x = .5;
+var y = 2.;
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var x = 0.5;
+var y = 2.0;
+```
+
+##### Enforcement
+
+ESLint rule: [`no-floating-decimal`][eslint-no-floating-decimal]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No new wrappers for primitives
+
+##### Reason
+
+Using `new` with `String`, `Number`, or `Boolean` creates wrapper objects, which behave unexpectedly with `typeof` checks.
+
+##### Enforcement
+
+ESLint rule: [`no-new-wrappers`][eslint-no-new-wrappers]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No increment/decrement operators outside of for loops
+
+##### Reason
+
+Using `++` and `--` as standalone statements can be error-prone due to automatic semicolon insertion. They are acceptable within `for` loop update expressions.
+
+##### Bad Example
+
+<!-- eslint-disable no-plusplus -->
+
+```javascript
+// Do not...
+var x = 1;
+x++;
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var x = 1;
+x += 1;
+```
+
+##### Enforcement
+
+ESLint rule: [`no-plusplus`][eslint-no-plusplus]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Always quote object property names
+
+##### Reason
+
+Quoting all property names ensures consistency and avoids confusion about which property names require quoting (e.g., reserved words, names with hyphens).
+
+##### Bad Example
+
+<!-- eslint-disable quote-props -->
+
+```javascript
+// Do not...
+var obj = {
+    foo: true,
+    bar: 'baz'
+};
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var obj = {
+    'foo': true,
+    'bar': 'baz'
+};
+```
+
+##### Enforcement
+
+ESLint rule: [`quote-props`][eslint-quote-props]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No nested ternary operators
+
+##### Reason
+
+Nested ternary operators decrease readability significantly. Use `if`/`else` instead.
+
+##### Enforcement
+
+ESLint rule: [`no-nested-ternary`][eslint-no-nested-ternary]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No use of undefined
+
+##### Reason
+
+Use `void 0` instead of `undefined` if an explicit `undefined` value is needed, or simply leave a variable uninitialized. The identifier `undefined` can be shadowed in older environments.
+
+##### Bad Example
+
+<!-- eslint-disable no-undefined, no-undef-init -->
+
+```javascript
+// Do not...
+var x = undefined;
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var x;
+```
+
+##### Enforcement
+
+ESLint rules: [`no-undefined`][eslint-no-undefined], [`no-undef-init`][eslint-no-undef-init]
+
+<!-- </rule> -->
+
+<!-- </rule-set> -->
+
+<!-- <rule-set> -->
+
+* * *
+
+## Code Complexity
+
+The following limits are enforced to keep code maintainable and readable.
+
+<!-- <rule> -->
+
+### Rule: Maximum line length of 80 characters
+
+##### Reason
+
+Long lines hinder readability, especially in side-by-side diffs. Comments, URLs, strings, template literals, and regular expressions are excluded from this limit.
+
+##### Enforcement
+
+ESLint rule: [`max-len`][eslint-max-len] (warning)
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Maximum nesting depth of 5
+
+##### Reason
+
+Deeply nested code is difficult to read and often signals that the code should be refactored.
+
+##### Enforcement
+
+ESLint rule: [`max-depth`][eslint-max-depth]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Maximum 300 lines per file
+
+##### Reason
+
+Large files are harder to navigate, understand, and test. Prefer splitting into smaller, focused modules.
+
+##### Notes
+
+-   Blank lines and comments are excluded from the count.
+
+##### Enforcement
+
+ESLint rule: [`max-lines`][eslint-max-lines] (warning)
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Maximum 200 lines per function
+
+##### Reason
+
+Long functions are difficult to understand and test. Prefer extracting logic into smaller helper functions.
+
+##### Notes
+
+-   Blank lines, comments, and IIFEs are excluded from the count.
+
+##### Enforcement
+
+ESLint rule: [`max-lines-per-function`][eslint-max-lines-per-function] (warning)
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Maximum 10 function parameters
+
+##### Reason
+
+A large number of parameters suggests that a function is doing too much or that an options object should be used instead.
+
+##### Enforcement
+
+ESLint rule: [`max-params`][eslint-max-params]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Maximum 3 nested callbacks
+
+##### Reason
+
+Excessive nesting of callbacks makes code difficult to follow. Prefer named functions or control flow utilities.
+
+##### Enforcement
+
+ESLint rule: [`max-nested-callbacks`][eslint-max-nested-callbacks]
+
+<!-- </rule> -->
+
+<!-- </rule-set> -->
+
+<!-- <rule-set> -->
+
+* * *
+
+## Node.js Conventions
+
+The following rules apply to Node.js and CommonJS code.
+
+<!-- <rule> -->
+
+### Rule: Use module.exports
+
+##### Reason
+
+Using `module.exports` instead of `exports` avoids a common source of confusion where reassigning `exports` breaks the module.
+
+##### Bad Example
+
+```javascript
+// Do not...
+exports.foo = 1;
+exports.bar = 2;
+```
+
+##### Good Example
+
+```javascript
+// Do...
+module.exports = {
+    'foo': 1,
+    'bar': 2
+};
+```
+
+##### Enforcement
+
+ESLint rule: [`node/exports-style`][eslint-node-exports-style]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use path.join for file paths
+
+##### Reason
+
+String concatenation for paths is fragile and platform-dependent.
+
+##### Bad Example
+
+```javascript
+// Do not...
+var foo = require( __dirname + '/foo.js' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var join = require( 'path' ).join;
+var foo = require( join( __dirname, 'foo.js' ) );
+```
+
+##### Enforcement
+
+ESLint rule: [`node/no-path-concat`][eslint-node-no-path-concat]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Handle callback errors
+
+##### Reason
+
+Ignoring error arguments in callbacks can mask bugs and lead to silent failures.
+
+##### Enforcement
+
+ESLint rule: [`node/handle-callback-err`][eslint-node-handle-callback-err]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Return callbacks to prevent multiple invocations
+
+##### Reason
+
+When a callback is called inside a conditional branch, failing to `return` after the call can result in the callback being invoked more than once.
+
+##### Bad Example
+
+```javascript
+// Do not...
+function foo( x, clbk ) {
+    if ( x === true ) {
+        clbk();
+    }
+    clbk();
+}
+```
+
+##### Good Example
+
+```javascript
+// Do...
+function foo( x, clbk ) {
+    if ( x === true ) {
+        return clbk();
+    }
+    clbk();
+}
+```
+
+##### Enforcement
+
+ESLint rule: [`node/callback-return`][eslint-node-callback-return]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Avoid process.env
+
+##### Reason
+
+Use the `@stdlib` environment utilities rather than accessing `process.env` directly.
+
+##### Enforcement
+
+ESLint rule: [`node/no-process-env`][eslint-node-no-process-env]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No new require
+
+##### Reason
+
+Using `new` with `require` combines two operations and is confusing.
+
+##### Bad Example
+
+```javascript
+// Do not...
+var foo = new require( 'foo' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var Foo = require( 'foo' );
+var foo = new Foo();
+```
+
+##### Enforcement
+
+ESLint rule: [`node/no-new-require`][eslint-node-no-new-require]
+
+<!-- </rule> -->
+
+<!-- </rule-set> -->
+
+<!-- <rule-set> -->
+
+* * *
+
+## ES2015 Restrictions
+
+This project targets Node.js 0.12+ compatibility and prefers ES5-era constructs. The following ES2015+ features are restricted.
+
+<!-- <rule> -->
+
+### Rule: No object shorthand
+
+##### Reason
+
+Shorthand notation decreases readability in complex objects. Prefer making key-value pairs explicit.
+
+##### Enforcement
+
+ESLint rule: [`object-shorthand`][eslint-object-shorthand] (set to `never`)
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No restricted syntax
+
+##### Reason
+
+Several ES2015+ syntactic constructs are restricted to maintain ES5 compatibility and stylistic consistency: arrow functions, class declarations, class expressions, destructuring, `for...of` loops, generators, rest/spread elements, `import`/`export` declarations, and tagged template expressions.
+
+##### Enforcement
+
+ESLint rule: [`no-restricted-syntax`][eslint-no-restricted-syntax]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Restricted imports
+
+##### Reason
+
+To maintain the project's philosophy of small, focused modules, the following packages may not be imported or required: `lodash`, `underscore`, and `async`.
+
+##### Enforcement
+
+ESLint rules: [`no-restricted-imports`][eslint-no-restricted-imports], [`node/no-restricted-require`][eslint-node-no-restricted-require]
+
+<!-- </rule> -->
+
+<!-- </rule-set> -->
+
+<!-- <rule-set> -->
+
+* * *
+
+## stdlib Custom Rules
+
+The project includes custom ESLint rules specific to stdlib conventions. These are defined in `etc/eslint/rules/stdlib.js`.
+
+### Comments and Formatting
+
+<!-- <rule> -->
+
+### Rule: Capitalize comments
+
+##### Reason
+
+Consistent capitalization improves readability and professionalism. Certain whitelisted terms (e.g., `eslint`, `ndarray`, `stdlib`) are excepted.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/capitalized-comments -->
+
+```javascript
+// Do not...
+function square( x ) {
+    var out;
+
+    // square the number:
+    out = x * x;
+    return out;
+}
+```
+
+##### Good Example
+
+```javascript
+// Do...
+function square( x ) {
+    var out;
+
+    // Square the number:
+    out = x * x;
+    return out;
+}
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/capitalized-comments`][eslint-stdlib-capitalized-comments] (warning)
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Empty line before comments
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/empty-line-before-comment -->
+
+```javascript
+// Do not...
+function square( x ) {
+    var out;
+    // Square the number:
+    out = x * x;
+    return out;
+}
+```
+
+##### Good Example
+
+```javascript
+// Do...
+function square( x ) {
+    var out;
+
+    // Square the number:
+    out = x * x;
+    return out;
+}
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/empty-line-before-comment`][eslint-stdlib-empty-line-before-comment]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No empty comments
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-empty-comments -->
+
+```javascript
+// Do not...
+function square( x ) {
+    var out;
+
+    //
+    out = x * x;
+    return out;
+}
+```
+
+##### Good Example
+
+```javascript
+// Do...
+function square( x ) {
+    var out;
+
+    // Square the number:
+    out = x * x;
+    return out;
+}
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-empty-comments`][eslint-stdlib-no-empty-comments]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use section headers to organize code
+
+##### Reason
+
+Section header comments (e.g., `// MAIN //`, `// EXPORTS //`) organize source files into clearly delineated sections.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/section-headers -->
+
+```javascript
+// Do not...
+
+// EXPORTS
+
+module.exports = {};
+```
+
+##### Good Example
+
+```javascript
+// Do...
+
+// EXPORTS //
+
+module.exports = {};
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/section-headers`][eslint-stdlib-section-headers]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Empty lines around section headers
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/section-header-empty-lines -->
+
+```javascript
+// Do not...
+
+// EXPORTS //
+module.exports = {};
+```
+
+##### Good Example
+
+```javascript
+// Do...
+
+// EXPORTS //
+
+module.exports = {};
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/section-header-empty-lines`][eslint-stdlib-section-header-empty-lines]
+
+<!-- </rule> -->
+
+### Doctest Conventions
+
+<!-- <rule> -->
+
+### Rule: Doctest return annotations must match actual output
+
+##### Bad Example
+
+```javascript
+// Do not...
+/**
+* Squares a number.
+*
+* @param {number} x - input value
+* @returns {number} x*x
+*
+* @example
+* var y = square( 3.0 );
+* // returns 12.0
+*/
+function square( x ) {
+    return x * x;
+}
+```
+
+##### Good Example
+
+```javascript
+// Do...
+/**
+* Squares a number.
+*
+* @param {number} x - input value
+* @returns {number} x*x
+*
+* @example
+* var y = square( 3.0 );
+* // returns 9.0
+*/
+function square( x ) {
+    return x * x;
+}
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-doctest`][eslint-stdlib-jsdoc-doctest]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Doctest return annotations for real values must include decimal points
+
+##### Bad Example
+
+```javascript
+// Do not...
+/**
+* @example
+* var y = square( 3.0 );
+* // returns 9
+*/
+```
+
+##### Good Example
+
+```javascript
+// Do...
+/**
+* @example
+* var y = square( 3.0 );
+* // returns 9.0
+*/
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-doctest-decimal-point`][eslint-stdlib-jsdoc-doctest-decimal-point]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use correct doctest markers
+
+##### Reason
+
+Use `// returns` for assignment return annotations and `// =>` for `console.log` output annotations.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/doctest-marker -->
+
+```javascript
+// Do not...
+var x = 3.0;
+// => 3.0
+
+console.log( 'Hello World' );
+// returns 'Hello World'
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var x = 3.0;
+// returns 3.0
+
+console.log( 'Hello World' );
+// => 'Hello World'
+```
+
+##### Enforcement
+
+ESLint rules: [`stdlib/doctest-marker`][eslint-stdlib-doctest-marker], [`stdlib/jsdoc-doctest-marker`][eslint-stdlib-jsdoc-doctest-marker]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Doctest annotation spacing
+
+##### Reason
+
+Require exactly one space between the marker and the value.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/doctest-annotation-spacing -->
+
+```javascript
+// Do not...
+var v = 3.14;
+// returns             3.14
+
+var x = true;
+//  returns true
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var v = 3.14;
+// returns 3.14
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/doctest-annotation-spacing`][eslint-stdlib-doctest-annotation-spacing]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Quote property names in doctest return annotations
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/doctest-quote-props -->
+
+```javascript
+// Do not...
+/* returns
+    {
+        a: 1,
+        b: true
+    }
+*/
+```
+
+##### Good Example
+
+```javascript
+// Do...
+/* returns
+    {
+        'a': 1,
+        'b': true
+    }
+*/
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/doctest-quote-props`][eslint-stdlib-doctest-quote-props]
+
+<!-- </rule> -->
+
+### JSDoc Markdown
+
+The project enforces extensive Markdown formatting rules within JSDoc comments.
+
+<!-- <rule> -->
+
+### Rule: Use 2-character blockquote indentation in JSDoc
+
+##### Bad Example
+
+```javascript
+// Do not...
+/**
+* Squares a number.
+*
+* >   This is a blockquote.
+*/
+```
+
+##### Good Example
+
+```javascript
+// Do...
+/**
+* Squares a number.
+*
+* > This is a blockquote.
+*/
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-blockquote-indentation`][eslint-stdlib-jsdoc-blockquote-indentation]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use fenced code blocks in JSDoc
+
+##### Bad Example
+
+```javascript
+// Do not...
+/**
+* Squares a number.
+*
+*     y = x;
+*/
+```
+
+##### Good Example
+
+```javascript
+// Do...
+/**
+* Squares a number.
+*
+* ```javascript
+* y = x;
+* ```
+*/
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-code-block-style`][eslint-stdlib-jsdoc-code-block-style]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Fenced code blocks must specify a language
+
+##### Bad Example
+
+```javascript
+// Do not...
+/**
+* Squares a number.
+*
+* ```
+* y = x;
+* ```
+*/
+```
+
+##### Good Example
+
+```javascript
+// Do...
+/**
+* Squares a number.
+*
+* ```javascript
+* y = x;
+* ```
+*/
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-fenced-code-flag`][eslint-stdlib-jsdoc-fenced-code-flag]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use backtick fenced code markers
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-fenced-code-marker`][eslint-stdlib-jsdoc-fenced-code-marker]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use underscore for emphasis in JSDoc
+
+##### Bad Example
+
+```javascript
+// Do not...
+/**
+* Squares a *number*.
+*/
+```
+
+##### Good Example
+
+```javascript
+// Do...
+/**
+* Squares a _number_.
+*/
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-emphasis-marker`][eslint-stdlib-jsdoc-emphasis-marker]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use ATX-style headings in JSDoc
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-heading-style`][eslint-stdlib-jsdoc-heading-style]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: First heading in JSDoc must be level 2
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-first-heading-level`][eslint-stdlib-jsdoc-first-heading-level]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: JSDoc descriptions must be complete sentences
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-leading-description-sentence`][eslint-stdlib-jsdoc-leading-description-sentence]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Require an empty line before `@example` tags
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-empty-line-before-example`][eslint-stdlib-jsdoc-empty-line-before-example]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Require spacing between require statements and code in JSDoc examples
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-example-require-spacing`][eslint-stdlib-jsdoc-example-require-spacing]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use tab-size indentation for JSDoc list items
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-list-item-indent`][eslint-stdlib-jsdoc-list-item-indent]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No raw HTML in JSDoc
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-no-html`][eslint-stdlib-jsdoc-no-html]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No literal URLs in JSDoc
+
+##### Reason
+
+URLs must be wrapped in angle brackets or use Markdown link syntax.
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-no-literal-urls`][eslint-stdlib-jsdoc-no-literal-urls]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Unix linebreaks only in JSDoc
+
+##### Enforcement
+
+ESLint rule: [`stdlib/jsdoc-linebreak-style`][eslint-stdlib-jsdoc-linebreak-style]
+
+<!-- </rule> -->
+
+### Require and Module Conventions
+
+<!-- <rule> -->
+
+### Rule: Spaces inside require parentheses
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/require-spaces -->
+
+```javascript
+// Do not...
+var foo = require('@stdlib/foo');
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var foo = require( '@stdlib/foo' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/require-spaces`][eslint-stdlib-require-spaces]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Require statements must follow a defined order
+
+##### Reason
+
+Require statements must be ordered: built-in modules first, then external packages, then `@stdlib` packages, then relative paths.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/require-order -->
+
+```javascript
+// Do not...
+var validate = require( './validate.js' );
+var math = require( '@stdlib/math' );
+var debug = require( 'debug' );
+var fs = require( 'fs' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var fs = require( 'fs' );
+var debug = require( 'debug' );
+var math = require( '@stdlib/math' );
+var validate = require( './validate.js' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/require-order`][eslint-stdlib-require-order]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No empty lines between require statements
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-empty-lines-between-requires -->
+
+```javascript
+// Do not...
+var foo = require( 'foo' );
+
+var bar = require( 'bar' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var foo = require( 'foo' );
+var bar = require( 'bar' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-empty-lines-between-requires`][eslint-stdlib-no-empty-lines-between-requires]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Require file extensions for local paths
+
+##### Reason
+
+Local `require` paths must include file extensions (`.js`, `.json`, or `.node`).
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/require-file-extensions -->
+
+```javascript
+// Do not...
+var debug = require( 'debug/src/browser' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var debug = require( 'debug/src/browser.js' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/require-file-extensions`][eslint-stdlib-require-file-extensions]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Require calls must be assigned to a variable
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-unassigned-require -->
+
+```javascript
+// Do not...
+require( '@stdlib' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var stdlib = require( '@stdlib' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-unassigned-require`][eslint-stdlib-no-unassigned-require]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No self require
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-self-require -->
+
+```javascript
+// Do not...
+var self = require( __filename );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var other = require( './other.js' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-self-require`][eslint-stdlib-no-self-require]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No dynamic require
+
+##### Reason
+
+Require calls must use string literals, not computed expressions.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-dynamic-require -->
+
+```javascript
+// Do not...
+var pkg = '@stdlib/math/base/special/betainc';
+var betainc = require( pkg );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var betainc = require( '@stdlib/math/base/special/betainc' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-dynamic-require`][eslint-stdlib-no-dynamic-require]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No nested require property access
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-nested-require -->
+
+```javascript
+// Do not...
+var special = require( '@stdlib' ).math.base.special;
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var special = require( '@stdlib/math/base/special' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-nested-require`][eslint-stdlib-no-nested-require]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No explicit index.js in require paths
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-require-index -->
+
+```javascript
+// Do not...
+var debug = require( 'debug/index.js' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var debug = require( 'debug' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-require-index`][eslint-stdlib-no-require-index]
+
+<!-- </rule> -->
+
+### Code Conventions
+
+<!-- <rule> -->
+
+### Rule: Wrap ternary conditions in parentheses
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/ternary-condition-parentheses -->
+
+```javascript
+// Do not...
+var bool = randu() > 0.5 ? 1 : 0;
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var bool = ( randu() > 0.5 ) ? 1 : 0;
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/ternary-condition-parentheses`][eslint-stdlib-ternary-condition-parentheses]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No spaces between opening bracket and nested object/array at end of line
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/eol-open-bracket-spacing -->
+
+```javascript
+// Do not...
+log( {
+    'foo': true
+});
+
+log( [
+    1,
+    2,
+    3
+]);
+```
+
+##### Good Example
+
+```javascript
+// Do...
+log({
+    'foo': true
+});
+
+log([
+    1,
+    2,
+    3
+]);
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/eol-open-bracket-spacing`][eslint-stdlib-eol-open-bracket-spacing]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Uppercase names for required constants
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/uppercase-required-constants -->
+
+```javascript
+// Do not...
+var eps = require( '@stdlib/constants/math/float64-eps' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var EPS = require( '@stdlib/constants/math/float64-eps' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/uppercase-required-constants`][eslint-stdlib-uppercase-required-constants]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Order variable declarations by descending length
+
+##### Reason
+
+Variable declarations must be ordered: assigned variables first, then unassigned, sorted by descending character length.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/vars-order -->
+
+```javascript
+// Do not...
+function fizzBuzz() {
+    var i;
+    var out;
+
+    for ( i = 1; i <= 100; i++ ) {
+        out = ( i % 5 === 0 ) ? 'Buzz' : i;
+        console.log( out );
+    }
+}
+```
+
+##### Good Example
+
+```javascript
+// Do...
+function fizzBuzz() {
+    var out;
+    var i;
+
+    for ( i = 1; i <= 100; i++ ) {
+        out = ( i % 5 === 0 ) ? 'Buzz' : i;
+        console.log( out );
+    }
+}
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/vars-order`][eslint-stdlib-vars-order]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No string concatenation in error messages
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-error-string-concat -->
+
+```javascript
+// Do not...
+throw new Error( 'invalid argument. Value: `' + value + '`.' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+throw new Error( 'unexpected error.' );
+throw new Error( format( 'invalid argument. Value: `%s`.', value ) );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-error-string-concat`][eslint-stdlib-no-error-string-concat]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No built-in Math object
+
+##### Reason
+
+Use `@stdlib/math` packages instead of the built-in `Math` object.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-builtin-math -->
+
+```javascript
+// Do not...
+var out = Math.exp( 2.0 );
+// returns ~7.389
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var exp = require( '@stdlib/math/base/special/exp' );
+
+var out = exp( 2.0 );
+// returns ~7.389
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-builtin-math`][eslint-stdlib-no-builtin-math]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No built-in BigInt
+
+##### Reason
+
+Use `@stdlib/bigint/ctor` instead of the built-in `BigInt` constructor.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-builtin-big-int -->
+
+```javascript
+// Do not...
+var x = BigInt( 123 );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var BigInt = require( '@stdlib/bigint/ctor' );
+
+var x = BigInt( 123 );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-builtin-big-int`][eslint-stdlib-no-builtin-big-int]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Use `new` with RegExp constructors
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/new-cap-regexp -->
+
+```javascript
+// Do not...
+var re = RegExp( '[0-9]' );
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var re = new RegExp( '[0-9]' );
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/new-cap-regexp`][eslint-stdlib-new-cap-regexp]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: No variable redeclaration
+
+##### Reason
+
+Do not redeclare variables, including built-in globals.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/no-redeclare -->
+
+```javascript
+// Do not...
+var a = 'beep';
+// ...
+var a = 'boop';
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var a = 'beep';
+// ...
+a = 'boop';
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/no-redeclare`][eslint-stdlib-no-redeclare]
+
+<!-- </rule> -->
+
+<!-- <rule> -->
+
+### Rule: Require specified globals explicitly
+
+##### Reason
+
+Built-in globals such as `Float32Array`, `Buffer`, `Promise`, and others must be explicitly required from `@stdlib` packages rather than used as bare globals.
+
+##### Bad Example
+
+<!-- eslint-disable stdlib/require-globals -->
+
+```javascript
+// Do not...
+var arr = new Float32Array();
+```
+
+##### Good Example
+
+```javascript
+// Do...
+var Float32Array = require( '@stdlib/array/float32' );
+
+var arr = new Float32Array();
+```
+
+##### Enforcement
+
+ESLint rule: [`stdlib/require-globals`][eslint-stdlib-require-globals]
+
+<!-- </rule> -->
+
+<!-- </rule-set> -->
+
 * * *
 
 ## Additional Resources
@@ -3658,6 +5502,214 @@ This document may be reused under a [Creative Commons Attribution-ShareAlike Lic
 [unix-philosophy]: http://www.catb.org/~esr/writings/taoup/html/ch01s06.html
 
 [license]: https://creativecommons.org/licenses/by-sa/4.0/
+
+[eslint-space-before-blocks]: https://eslint.org/docs/rules/space-before-blocks
+
+[eslint-comma-spacing]: https://eslint.org/docs/rules/comma-spacing
+
+[eslint-space-in-parens]: https://eslint.org/docs/rules/space-in-parens
+
+[eslint-computed-property-spacing]: https://eslint.org/docs/rules/computed-property-spacing
+
+[eslint-space-infix-ops]: https://eslint.org/docs/rules/space-infix-ops
+
+[eslint-space-unary-ops]: https://eslint.org/docs/rules/space-unary-ops
+
+[eslint-spaced-comment]: https://eslint.org/docs/rules/spaced-comment
+
+[eslint-indent]: https://eslint.org/docs/rules/indent
+
+[eslint-semi]: https://eslint.org/docs/rules/semi
+
+[eslint-stdlib-ternary-condition-parentheses]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-vars-on-top]: https://eslint.org/docs/rules/vars-on-top
+
+[eslint-one-var]: https://eslint.org/docs/rules/one-var
+
+[eslint-max-statements-per-line]: https://eslint.org/docs/rules/max-statements-per-line
+
+[eslint-quotes]: https://eslint.org/docs/rules/quotes
+
+[eslint-no-restricted-syntax]: https://eslint.org/docs/rules/no-restricted-syntax
+
+[eslint-comma-dangle]: https://eslint.org/docs/rules/comma-dangle
+
+[eslint-object-shorthand]: https://eslint.org/docs/rules/object-shorthand
+
+[eslint-func-style]: https://eslint.org/docs/rules/func-style
+
+[eslint-no-loop-func]: https://eslint.org/docs/rules/no-loop-func
+
+[eslint-no-inner-declarations]: https://eslint.org/docs/rules/no-inner-declarations
+
+[eslint-wrap-iife]: https://eslint.org/docs/rules/wrap-iife
+
+[eslint-stdlib-no-unnecessary-nested-functions]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-func-names]: https://eslint.org/docs/rules/func-names
+
+[eslint-strict]: https://eslint.org/docs/rules/strict
+
+[eslint-curly]: https://eslint.org/docs/rules/curly
+
+[eslint-brace-style]: https://eslint.org/docs/rules/brace-style
+
+[eslint-eqeqeq]: https://eslint.org/docs/rules/eqeqeq
+
+[eslint-require-jsdoc]: https://eslint.org/docs/rules/require-jsdoc
+
+[eslint-valid-jsdoc]: https://eslint.org/docs/rules/valid-jsdoc
+
+[eslint-stdlib-empty-line-before-comment]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-camelcase]: https://eslint.org/docs/rules/camelcase
+
+[eslint-new-cap]: https://eslint.org/docs/rules/new-cap
+
+[eslint-no-underscore-dangle]: https://eslint.org/docs/rules/no-underscore-dangle
+
+[eslint-consistent-this]: https://eslint.org/docs/rules/consistent-this
+
+[eslint-no-eval]: https://eslint.org/docs/rules/no-eval
+
+[eslint-no-extend-native]: https://eslint.org/docs/rules/no-extend-native
+
+[eslint-guard-for-in]: https://eslint.org/docs/rules/guard-for-in
+
+[eslint-default-case]: https://eslint.org/docs/rules/default-case
+
+[eslint-default-case-last]: https://eslint.org/docs/rules/default-case-last
+
+[eslint-no-throw-literal]: https://eslint.org/docs/rules/no-throw-literal
+
+[eslint-radix]: https://eslint.org/docs/rules/radix
+
+[eslint-no-floating-decimal]: https://eslint.org/docs/rules/no-floating-decimal
+
+[eslint-no-new-wrappers]: https://eslint.org/docs/rules/no-new-wrappers
+
+[eslint-no-plusplus]: https://eslint.org/docs/rules/no-plusplus
+
+[eslint-quote-props]: https://eslint.org/docs/rules/quote-props
+
+[eslint-no-nested-ternary]: https://eslint.org/docs/rules/no-nested-ternary
+
+[eslint-no-undefined]: https://eslint.org/docs/rules/no-undefined
+
+[eslint-no-undef-init]: https://eslint.org/docs/rules/no-undef-init
+
+[eslint-max-len]: https://eslint.org/docs/rules/max-len
+
+[eslint-max-depth]: https://eslint.org/docs/rules/max-depth
+
+[eslint-max-lines]: https://eslint.org/docs/rules/max-lines
+
+[eslint-max-lines-per-function]: https://eslint.org/docs/rules/max-lines-per-function
+
+[eslint-max-params]: https://eslint.org/docs/rules/max-params
+
+[eslint-max-nested-callbacks]: https://eslint.org/docs/rules/max-nested-callbacks
+
+[eslint-node-exports-style]: https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/exports-style.md
+
+[eslint-node-no-path-concat]: https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/no-path-concat.md
+
+[eslint-node-handle-callback-err]: https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/handle-callback-err.md
+
+[eslint-node-callback-return]: https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/callback-return.md
+
+[eslint-node-no-process-env]: https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/no-process-env.md
+
+[eslint-node-no-new-require]: https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/no-new-require.md
+
+[eslint-no-restricted-imports]: https://eslint.org/docs/rules/no-restricted-imports
+
+[eslint-node-no-restricted-require]: https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/no-restricted-require.md
+
+[eslint-stdlib-capitalized-comments]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-empty-comments]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-section-headers]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-section-header-empty-lines]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-doctest]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-doctest-decimal-point]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-doctest-marker]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-doctest-marker]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-doctest-annotation-spacing]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-doctest-quote-props]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-blockquote-indentation]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-code-block-style]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-fenced-code-flag]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-fenced-code-marker]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-emphasis-marker]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-heading-style]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-first-heading-level]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-leading-description-sentence]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-empty-line-before-example]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-example-require-spacing]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-list-item-indent]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-no-html]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-no-literal-urls]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-jsdoc-linebreak-style]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-require-spaces]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-require-order]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-empty-lines-between-requires]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-require-file-extensions]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-unassigned-require]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-self-require]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-dynamic-require]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-nested-require]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-require-index]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-eol-open-bracket-spacing]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-uppercase-required-constants]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-vars-order]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-error-string-concat]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-builtin-math]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-builtin-big-int]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-new-cap-regexp]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-no-redeclare]: https://github.com/stdlib-js/eslint-plugin-stdlib
+
+[eslint-stdlib-require-globals]: https://github.com/stdlib-js/eslint-plugin-stdlib
 
 </section>
 
