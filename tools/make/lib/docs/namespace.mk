@@ -1,7 +1,7 @@
 #/
 # @license Apache-2.0
 #
-# Copyright (c) 2017 The Stdlib Authors.
+# Copyright (c) 2026 The Stdlib Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,29 +16,14 @@
 # limitations under the License.
 #/
 
-# DEPENDENCIES #
-
-include $(TOOLS_MAKE_LIB_DIR)/docs/namespace.mk
-include $(TOOLS_MAKE_LIB_DIR)/docs/repl.mk
-include $(TOOLS_MAKE_LIB_DIR)/docs/src.mk
-include $(TOOLS_MAKE_LIB_DIR)/docs/typedoc.mk
-
-
 # TARGETS #
 
-# Generate documentation.
+# Build the package catalog.
 #
-# This target runs tasks to generate documentation.
+# This target generates a JSON catalog mapping package names to metadata
+# (alias, description, type, related packages, and capability flags).
 
-docs: src-docs
+namespace-packages: $(NODE_MODULES) $(SRC_DIR)/@stdlib/namespace/packages/scripts/build.js
+	$(QUIET) $(NODE) "$(SRC_DIR)/@stdlib/namespace/packages/scripts/build.js"
 
-.PHONY: docs
-
-
-# Remove generated documentation.
-#
-# This target cleans generated documentation by removing it entirely.
-
-clean-docs: clean-src-docs
-
-.PHONY: clean-docs
+.PHONY: namespace-packages
