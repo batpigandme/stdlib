@@ -59,6 +59,18 @@ $ make EXAMPLES_FILTER=".*/math/base/special/sin/.*" examples
 $ make BENCHMARKS_FILTER=".*/math/base/special/sin/.*" benchmark
 ```
 
+## Searching via the REPL
+
+<!-- run-disable -->
+
+```bash
+# Launch the stdlib REPL:
+$ node -e "var repl = require('@stdlib/repl'); repl();"
+
+# Within the REPL, display help for any alias:
+> help( 'abs' )
+```
+
 ## Looking Up Packages
 
 | Task                                  | Where to look                                               |
