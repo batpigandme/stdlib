@@ -18,6 +18,8 @@ limitations under the License.
 
 -->
 
+<!-- lint disable expected-html-sections -->
+
 # Visual Studio Code
 
 > A guide for using [Visual Studio Code][vscode] for project development.
@@ -45,17 +47,31 @@ $ code .
 
 ## Extensions
 
--   [**EditorConfig**][vscode-editorconfig]: extension for using [EditorConfig][editorconfig], which helps define and maintain consistent coding styles between different editors and IDEs.
+### Required
 
--   [**JSON Tools**][vscode-json-tools]: extension for pretty printing and minifying [JSON][json].
+-   [**EditorConfig**][vscode-editorconfig]: extension for using [EditorConfig][editorconfig], which automatically applies the project's indentation, line ending, and whitespace settings. This extension is required for all contributors regardless of which languages they work with.
 
--   [**Julia**][vscode-julia]: extension which provides support for [Julia][julia], including syntax highlighting, snippets, and code completion.
+### Optional
 
--   [**Python**][vscode-python]: extension which provides rich support for [Python][python], including syntax highlighting, snippets, and code completion, among other features.
+The following extensions are useful depending on which parts of the codebase you work with. Install only what you need.
 
--   [**AWK**][vscode-awk]: extension which provides syntax highlighting for [AWK][awk].
+**JavaScript:**
+
+-   [**ESLint**][vscode-eslint]: extension to integrate [eslint][eslint] into [Visual Studio Code][vscode]. Once installed, configure the extension to use the project [ESLint][eslint] configuration files in your workspace settings.
+
+    ```text
+            ...
+            "eslint.options": {
+                "configFile": "etc/eslint/.eslintrc.js"
+            }
+            ...
+    ```
+
+**C/C++:**
 
 -   [**C/C++**][vscode-cpptools]: official extension providing language support for C/C++ to [Visual Studio Code][vscode]. Features include IntelliSense, debugging, and code browsing.
+
+**Fortran:**
 
 -   [**Fortran**][vscode-fortran]: extension which provides syntax highlighting and snippets for [Fortran][fortran]. Once installed, configure [Visual Studio Code][vscode] to always open files having the file extension `*.f` as `Fortran - Modern` in your user or workspace settings.
 
@@ -67,17 +83,23 @@ $ code .
             ...
     ```
 
+**Python:**
+
+-   [**Python**][vscode-python]: extension which provides rich support for [Python][python], including syntax highlighting, snippets, and code completion, among other features.
+
+**Julia:**
+
+-   [**Julia**][vscode-julia]: extension which provides support for [Julia][julia], including syntax highlighting, snippets, and code completion.
+
+**AWK:**
+
+-   [**AWK**][vscode-awk]: extension which provides syntax highlighting for [AWK][awk].
+
+**General:**
+
+-   [**JSON Tools**][vscode-json-tools]: extension for pretty printing and minifying [JSON][json].
+
 -   [**Code Spell Checker**][vscode-spell-checker]: A simple source code spell checker. See the [official documentation][vscode-spell-checker-readme] for configuration options.
-
--   [**ESLint**][vscode-eslint]: extension to integrate [eslint][eslint] into [Visual Studio Code][vscode]. Once installed, you need to configure the extension to use the project [ESLint][eslint] configuration files in your workspace settings.
-
-    ```text
-            ...
-            "eslint.options": {
-                "configFile": "etc/eslint/.eslintrc.js"
-            }
-            ...
-    ```
 
 -   [**Path Intellisense**][vscode-path-intellisense]: extension that autocompletes filenames.
 
@@ -125,6 +147,32 @@ $ code .
             ]
             ...
     ```
+
+## Performance
+
+Because the project contains over 300,000 files, [Visual Studio Code][vscode] may struggle with file watching, search indexing, and general responsiveness without proper configuration. Add the following to your workspace settings (`.vscode/settings.json`) to exclude heavy directories from the file watcher and search index while keeping the main source code under `lib/node_modules/@stdlib/` fully indexed.
+
+```json
+{
+    "files.watcherExclude": {
+        "**/deps/**": true,
+        "**/dist/**": true,
+        "**/node_modules/.cache/**": true,
+        "**/build/**": true,
+        "**/.git/**": true
+    },
+    "search.exclude": {
+        "**/deps/**": true,
+        "**/dist/**": true,
+        "**/node_modules/.cache/**": true,
+        "**/build/**": true
+    }
+}
+```
+
+If you experience further performance issues, add additional paths to `files.watcherExclude` and `search.exclude` in your workspace settings.
+
+For focused development on a specific package, consider opening only the package subdirectory (e.g., `lib/node_modules/@stdlib/math/base/special/sin`) in a separate [Visual Studio Code][vscode] window. This dramatically reduces the number of files that [Visual Studio Code][vscode] needs to track and results in faster search and IntelliSense.
 
 <section class="links">
 
