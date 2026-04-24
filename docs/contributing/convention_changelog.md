@@ -48,8 +48,6 @@ Active conventions are migrations that are in progress. Packages are being updat
 
 ### Use string interpolation in JavaScript benchmark names
 
-<!-- lint disable no-emphasis-as-heading -->
-
 **Rule:** Use `format()` from `@stdlib/string/format` for benchmark names. Do not use string concatenation.
 
 **Status:** Active.
@@ -60,7 +58,7 @@ Active conventions are migrations that are in progress. Packages are being updat
 
 **Do not apply to:** General string construction elsewhere in the package. This convention is about benchmark names only. Other uses of string concatenation in `lib/`, `test/`, or `examples/` are out of scope and should not be changed as part of this migration.
 
-**Before:**
+#### Before
 
 ```javascript
 bench( pkg+':ndims='+ndims, function benchmark( b ) {
@@ -68,7 +66,7 @@ bench( pkg+':ndims='+ndims, function benchmark( b ) {
 });
 ```
 
-**After:**
+#### After
 
 ```javascript
 var format = require( '@stdlib/string/format' );
@@ -96,7 +94,7 @@ bench( format( '%s:ndims=%d', pkg, ndims ), function benchmark( b ) {
 
 **Do not apply to:** Runtime code in `lib/` that legitimately uses `.get()` or `ndarray2array()` for non-display purposes. This is a documentation-only convention. If an example genuinely needs to demonstrate element access or array conversion as the subject of the example, keep the decomposition.
 
-**Before:**
+#### Before
 
 ```javascript
 var out = countFalsy( x );
@@ -106,7 +104,7 @@ var v = out.get();
 // returns 1
 ```
 
-**After:**
+#### After
 
 ```javascript
 var out = countFalsy( x );
@@ -129,7 +127,7 @@ var out = countFalsy( x );
 
 **Do not apply to:** Runtime code in `lib/` or examples where the subject of the example is specifically demonstrating how to extract real and imaginary components. This is a documentation-only convention intended to remove decomposition logic added purely for display purposes.
 
-**Before:**
+#### Before
 
 ```javascript
 var realf = require( '@stdlib/complex/float32/real' );
@@ -147,7 +145,7 @@ var im = imagf( y );
 // returns 10.0
 ```
 
-**After:**
+#### After
 
 ```javascript
 var y = x.get( 0 );
@@ -170,7 +168,7 @@ var y = x.get( 0 );
 
 **Do not apply to:** Runtime code in `lib/` that legitimately iterates over typed array elements for non-display purposes. This is a documentation-only convention.
 
-**Before:**
+#### Before
 
 ```javascript
 var realf = require( '@stdlib/complex/float32/real' );
@@ -190,7 +188,7 @@ var im = imagf( z );
 // returns 2.0
 ```
 
-**After:**
+#### After
 
 ```javascript
 ccopy( x.length, x, 1, y, 1 );
@@ -211,7 +209,7 @@ ccopy( x.length, x, 1, y, 1 );
 
 **Do not apply to:** Small fixed-size stack allocations such as `int64_t shape[ 3 ];` or `double coords[ 4 ];`. These do not risk stack overflow and should remain stack-allocated. Runtime code in `src/` is also out of scope — this convention targets benchmarks specifically.
 
-**Before:**
+#### Before
 
 ```c
 static double benchmark( int iterations, int len ) {
@@ -220,7 +218,7 @@ static double benchmark( int iterations, int len ) {
 }
 ```
 
-**After:**
+#### After
 
 ```c
 static double benchmark( int iterations, int len ) {
@@ -247,14 +245,14 @@ static double benchmark( int iterations, int len ) {
 
 **Do not apply to:** File names — those follow the conventions of their own type (e.g., JavaScript files use camelCase or dot-separated names; JSON fixture files use snake_case). This rule is specifically about directory names, not file names.
 
-**Before:**
+#### Before
 
 ```text
 test/fixtures/largeDynamic/
 test/fixtures/small_static/
 ```
 
-**After:**
+#### After
 
 ```text
 test/fixtures/large-dynamic/

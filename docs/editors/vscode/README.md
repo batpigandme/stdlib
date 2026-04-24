@@ -55,7 +55,7 @@ $ code .
 
 The following extensions are useful depending on which parts of the codebase you work with. Install only what you need.
 
-**JavaScript:**
+#### JavaScript
 
 -   [**ESLint**][vscode-eslint]: extension to integrate [eslint][eslint] into [Visual Studio Code][vscode]. Once installed, configure the extension to use the project [ESLint][eslint] configuration files in your workspace settings.
 
@@ -67,11 +67,11 @@ The following extensions are useful depending on which parts of the codebase you
             ...
     ```
 
-**C/C++:**
+#### C/C++
 
 -   [**C/C++**][vscode-cpptools]: official extension providing language support for C/C++ to [Visual Studio Code][vscode]. Features include IntelliSense, debugging, and code browsing.
 
-**Fortran:**
+#### Fortran
 
 -   [**Fortran**][vscode-fortran]: extension which provides syntax highlighting and snippets for [Fortran][fortran]. Once installed, configure [Visual Studio Code][vscode] to always open files having the file extension `*.f` as `Fortran - Modern` in your user or workspace settings.
 
@@ -83,19 +83,19 @@ The following extensions are useful depending on which parts of the codebase you
             ...
     ```
 
-**Python:**
+#### Python
 
 -   [**Python**][vscode-python]: extension which provides rich support for [Python][python], including syntax highlighting, snippets, and code completion, among other features.
 
-**Julia:**
+#### Julia
 
 -   [**Julia**][vscode-julia]: extension which provides support for [Julia][julia], including syntax highlighting, snippets, and code completion.
 
-**AWK:**
+#### AWK
 
 -   [**AWK**][vscode-awk]: extension which provides syntax highlighting for [AWK][awk].
 
-**General:**
+#### General
 
 -   [**JSON Tools**][vscode-json-tools]: extension for pretty printing and minifying [JSON][json].
 

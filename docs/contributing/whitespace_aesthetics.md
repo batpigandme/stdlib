@@ -55,7 +55,7 @@ Array indexing is the canonical application of this principle.
 
 Spaces inside index brackets make the indexing logic visually distinct from the variable being indexed. The reader can immediately identify where the array access begins and end, and parse the index expression without effort.
 
-**When the index expression is non-trivial, use spaces:**
+### When the index expression is non-trivial, use spaces
 
 ```javascript
 // Before — no visual separation; requires mental tokenization
