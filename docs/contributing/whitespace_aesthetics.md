@@ -131,15 +131,17 @@ Note the stronger stance in this example: **every** whitespace gap inside each s
 
 Parentheses are a grouping signal, much like whitespace. Applying them to a sub-expression that already reads as a single unit — a bare identifier, a property access, a literal — is the same kind of noise as exploding arithmetic across unnecessary whitespace. The reader sees grouping marks and looks for grouping; finding none, they have done work for no payoff.
 
-```javascript
-// Before — the parens around `z.length` add a grouping signal with nothing to group
-if ( isnanf( z[ i%(z.length) ] ) ) {
+The `cgemv` benchmark in PR #10485 contains a single expression that stacks three problems at once — asymmetric operator spacing around `%`, redundant parentheses around a property access, and interior space inside those parentheses:
 
-// After — `z.length` is already a single unit; the surrounding brackets are the only grouping needed
+```javascript
+// Before — `i%` is asymmetric (no space before, space after); parens around `z.length` add grouping with nothing to group; interior space inside the parens adds further noise
+if ( isnanf( z[ i% ( z.length ) ] ) ) {
+
+// After — `z.length` is already a single unit; the brackets are the only grouping needed; `%` is flush on both sides
 if ( isnanf( z[ i%z.length ] ) ) {
 ```
 
-Kgryte's review comment: _"Not clear why you are wrapping `z.length` in parentheses."_ The same suggestion recurs across benchmark, ndarray benchmark, and example files in [stdlib-js/stdlib#10485][gh-10485] — when the pattern appears PR-wide, that is a signal to strip it PR-wide.
+Kgryte's suggestion collapses all three in one move. ([stdlib-js/stdlib#10485][gh-10485-r3098594580]) The same parenthesization pattern recurs across benchmark, ndarray benchmark, and example files in that PR — when the pattern appears PR-wide, that is a signal to strip it PR-wide. (See also [Symmetric operator spacing](#symmetric-operator-spacing) for the asymmetric-`%` lesson in isolation.)
 
 The principle generalizes: **structural markers — whether parentheses or whitespace — should always have something to disambiguate**. If they do not, they are visual clutter competing with the markers that do.
 
@@ -328,6 +330,14 @@ Kgryte's commit message for this change: _"Remove spaces in order to visually gr
 
 Two operators at two precedence levels are in play: `-` (arithmetic, binds tight) and `? :` (ternary, binds loose). When the looser operator is where the reader needs to see structure, the tighter one underneath should compact. Spacing follows _semantic salience_, not operator precedence — but precedence is a reasonable first guess when no stronger signal is available.
 
+### Symmetric operator spacing
+
+Whether to compact or space a binary operator is judgment. Whether to be _symmetric_ about it is not.
+
+`i% z.length` and `i %z.length` are always wrong, the same way `[i ]` and `[ i]` are always wrong — they read as typos rather than as deliberate choices. The correct forms are `i%z.length` (compact) or `i % z.length` (spaced); pick whichever suits the expression's salience, but apply it on both sides.
+
+Kgryte's suggestion on the `cgemv` benchmark in PR #10485 normalizes the asymmetric `i%` in the same edit that strips the redundant parentheses — collapsing `i% ( z.length )` to `i%z.length` in one move. ([stdlib-js/stdlib#10485][gh-10485-r3098594580]) The asymmetry is not called out separately in the review comment because it is _obviously_ wrong; no judgment is needed to flag it. This is one of the few places in the operator-spacing landscape where the project is strict. (See also the bracket-symmetry rule in [There Are No Absolute Rules](#there-are-no-absolute-rules).)
+
 _TODO(kgryte): Add further examples covering logical operators, comparison chains, and mixed arithmetic/assignment cases._
 
 ## When Negative Space Is Not Beneficial
@@ -348,7 +358,7 @@ Contributors are expected to develop this judgment over time — by reading exis
 
 A corollary of the non-dogmatic stance: **don't go out of your way to enforce whitespace on existing code**. Sweeping PRs that flip `x[i]` to `x[ i ]` across a file — or across a package — tend to create more work than they resolve. Kgryte's framing on one such PR: _"For the most part, we are not militant about this. By default, yes, we use spaces. But we also allow some flexibility depending on what aspects of the code should be visually emphasized ... I wouldn't go overboard with going out of your way to enforce spacing, so long as a file is consistent. Otherwise, you're likely to just create more work for yourself."_ ([stdlib-js/stdlib#2189][gh-2189])
 
-The bar that _does_ matter for pre-existing code is **consistency within a file**. If a file already uses `x[i]` throughout, don't flip one expression to `x[ i ]` in isolation; either leave it or change the whole file with a rationale. The one mechanical rule the project is strict about is **symmetry** — `[i ]` and `[ i]` are always wrong regardless of context, because they read as typos rather than as deliberate choices.
+The bar that _does_ matter for pre-existing code is **consistency within a file**. If a file already uses `x[i]` throughout, don't flip one expression to `x[ i ]` in isolation; either leave it or change the whole file with a rationale. The one mechanical rule the project is strict about is **symmetry** — `[i ]` and `[ i]` are always wrong regardless of context, because they read as typos rather than as deliberate choices. The same rule extends to binary operators: `i% z` and `i %z` are equally wrong. (See [Symmetric operator spacing](#symmetric-operator-spacing) for the full treatment.)
 
 ## Guidance for Reviewers and AI Tools
 
@@ -365,7 +375,7 @@ Concrete heuristics:
 -   **Consistency with context:** does this expression follow the same spacing pattern as similar expressions in the same file or namespace? If not, is there a reason?
 -   **JSON fixture arrays that represent matrices:** is the array formatted flat, or does it visually mirror the row structure? If the data is a matrix, prefer row-grouped formatting. Apply this to all fixture files in the PR, not just the one under review.
 -   **Blank lines between related statements:** is a group boundary being communicated visually? If a lint rule has stripped or complained about a blank line that was doing real grouping work, the fix is a localized lint-disable comment, not removing the line.
--   **Asymmetric bracket spacing:** `[ i]` or `[i ]` is always wrong regardless of context — brackets either both have interior space or neither does. This is one of the few places where the project is strict.
+-   **Asymmetric spacing (brackets and operators):** `[ i]` or `[i ]` is always wrong regardless of context — brackets either both have interior space or neither does. The same symmetry rule applies to binary operators: `i% z` and `i %z` are equally wrong. These are the few places where the project is strict rather than judgment-laden.
 -   **Proportionality:** is this change worth the review cost? Sweeping whitespace-only PRs across unrelated expressions rarely pay for themselves. Flag an individual expression where spacing is actively hurting readability; don't run a file- or package-wide whitespace refactor.
 -   **Parallel data in examples:** are mask/value/index arrays declared on adjacent lines so corresponding positions align vertically? If parallel data is inline in a function call — especially in README examples — consider extracting it to a named variable above the call so the reader can trace the correspondence with a single eye-drop.
 -   **Benchmark setup vs. timing block:** in `benchmark/benchmark.js`-style files, is there a blank line between the data-generation code and the `b.tic()` call? The setup/measurement boundary is one of the few places in stdlib where a blank line is treated as near-mandatory rather than judgment-laden.
@@ -398,6 +408,8 @@ The converse also holds: **a lint error is not always right**. When a mechanical
 [gh-10706]: https://github.com/stdlib-js/stdlib/pull/10706
 
 [gh-10485]: https://github.com/stdlib-js/stdlib/pull/10485
+
+[gh-10485-r3098594580]: https://github.com/stdlib-js/stdlib/pull/10485#discussion_r3098594580
 
 [gh-10262]: https://github.com/stdlib-js/stdlib/pull/10262
 
