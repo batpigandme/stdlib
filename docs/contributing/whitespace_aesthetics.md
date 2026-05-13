@@ -358,6 +358,8 @@ Contributors are expected to develop this judgment over time — by reading exis
 
 A corollary of the non-dogmatic stance: **don't go out of your way to enforce whitespace on existing code**. Sweeping PRs that flip `x[i]` to `x[ i ]` across a file — or across a package — tend to create more work than they resolve. Kgryte's framing on one such PR: _"For the most part, we are not militant about this. By default, yes, we use spaces. But we also allow some flexibility depending on what aspects of the code should be visually emphasized ... I wouldn't go overboard with going out of your way to enforce spacing, so long as a file is consistent. Otherwise, you're likely to just create more work for yourself."_ ([stdlib-js/stdlib#2189][gh-2189])
 
+That constraint is about retroactive sweeps — going back into existing stable code to enforce a preference. The expectation for _new_ code under review is the opposite: fix it before it merges. Kgryte's review of the `gsumkbn` package ([stdlib-js/stdlib#8834][gh-8834]) is the pattern: he swept every file in the new package — benchmark, examples, source, tests, and TypeScript declarations — and normalized `[x]` → `[ x ]` and `arrays[ 0 ]` throughout before approving. Note that single-element array literals are not exempt: `[x]` gets spaces for the same reason `[1.0, 2.0]` does. New code lands at the default; existing consistent code gets left alone.
+
 The bar that _does_ matter for pre-existing code is **consistency within a file**. If a file already uses `x[i]` throughout, don't flip one expression to `x[ i ]` in isolation; either leave it or change the whole file with a rationale. The one mechanical rule the project is strict about is **symmetry** — `[i ]` and `[ i]` are always wrong regardless of context, because they read as typos rather than as deliberate choices. The same rule extends to binary operators: `i% z` and `i %z` are equally wrong. (See [Symmetric operator spacing](#symmetric-operator-spacing) for the full treatment.)
 
 ## Guidance for Reviewers and AI Tools
@@ -418,6 +420,8 @@ The converse also holds: **a lint error is not always right**. When a mechanical
 [gh-4768]: https://github.com/stdlib-js/stdlib/pull/4768
 
 [gh-9690]: https://github.com/stdlib-js/stdlib/pull/9690
+
+[gh-8834]: https://github.com/stdlib-js/stdlib/pull/8834
 
 [gh-2189]: https://github.com/stdlib-js/stdlib/pull/2189
 
