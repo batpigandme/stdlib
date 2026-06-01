@@ -77,7 +77,7 @@ strides[ d + S2 - 1 ] = st[ d ];
 strides[ d+S2-1 ] = st[ d ];
 ```
 
-Athan's review comment on the above: _"Learn to use whitespace more effectively to help direct the eyes to salient info. Here, with all the terms, you are making it harder for readers to read."_ ([stdlib-js/stdlib#10706][gh-10706])
+Kgryte's review comment on the above: _"Learn to use whitespace more effectively to help direct the eyes to salient info. Here, with all the terms, you are making it harder for readers to read."_ ([stdlib-js/stdlib#10706][gh-10706])
 
 The same PR contains a second suggestion that shows the principle applied selectively within a single `for` statement:
 
@@ -131,7 +131,7 @@ Note the stronger stance in this example: **every** whitespace gap inside each s
 
 Parentheses are a grouping signal, much like whitespace. Applying them to a sub-expression that already reads as a single unit — a bare identifier, a property access, a literal — is the same kind of noise as exploding arithmetic across unnecessary whitespace. The reader sees grouping marks and looks for grouping; finding none, they have done work for no payoff.
 
-The `cgemv` benchmark in PR #10485 contains a single expression that stacks three problems at once — asymmetric operator spacing around `%`, redundant parentheses around a property access, and interior space inside those parentheses:
+The `cgemv` benchmark in [PR #10485][gh-10485] contains a single expression that stacks three problems at once — asymmetric operator spacing around `%`, redundant parentheses around a property access, and interior space inside those parentheses:
 
 ```javascript
 // Before — `i%` is asymmetric (no space before, space after); parens around `z.length` add grouping with nothing to group; interior space inside the parens adds further noise
@@ -382,7 +382,7 @@ Whether to compact or space a binary operator is judgment. Whether to be _symmet
 
 `i% z.length` and `i %z.length` are always wrong, the same way `[i ]` and `[ i]` are always wrong — they read as typos rather than as deliberate choices. The correct forms are `i%z.length` (compact) or `i % z.length` (spaced); pick whichever suits the expression's salience, but apply it on both sides.
 
-Kgryte's suggestion on the `cgemv` benchmark in PR #10485 normalizes the asymmetric `i%` in the same edit that strips the redundant parentheses — collapsing `i% ( z.length )` to `i%z.length` in one move. ([stdlib-js/stdlib#10485][gh-10485-r3098594580]) The asymmetry is not called out separately in the review comment because it is _obviously_ wrong; no judgment is needed to flag it. This is one of the few places in the operator-spacing landscape where the project is strict. (See also the bracket-symmetry rule in [There Are No Absolute Rules](#there-are-no-absolute-rules).)
+Kgryte's suggestion on the `cgemv` benchmark in [PR #10485][gh-10485] normalizes the asymmetric `i%` in the same edit that strips the redundant parentheses — collapsing `i% ( z.length )` to `i%z.length` in one move. ([stdlib-js/stdlib#10485][gh-10485-r3098594580]) The asymmetry is not called out separately in the review comment because it is _obviously_ wrong; no judgment is needed to flag it. This is one of the few places in the operator-spacing landscape where the project is strict. (See also the bracket-symmetry rule in [There Are No Absolute Rules](#there-are-no-absolute-rules).)
 
 _TODO(kgryte): Add further examples covering logical operators, comparison chains, and mixed arithmetic/assignment cases._
 
