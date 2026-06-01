@@ -239,6 +239,52 @@ Some LAPACK routines use compact band storage, where each row of the storage arr
 
 The judgment call here is determining the row width, which requires knowing the leading dimension or shape from the package's `README.md` or companion test. Don't guess — look it up. ([stdlib-js/stdlib#10262][gh-10262])
 
+## Test Fixture Arrays
+
+JSON fixtures cover the matrix-data case. JavaScript test files raise a related but distinct problem: a flat array of numbers where some elements are _indexed_ (touched by the function under test) and others are _not_, frequently with non-unit strides interleaving them. A single-line array of these gives the reader nothing to anchor on — they have to mentally count strides to map array positions to logical indices, then visually diff input against expected to identify which slots changed.
+
+Three moves, all from the same review on a `blas/ext/base/ndarray` PR ([stdlib-js/stdlib#12407][gh-12407-r3331009148]):
+
+1.  **Break the array vertically — one element per line.** Single-line arrays force the reader to do the visual grouping work themselves.
+2.  **Annotate indexed elements with their logical index in a trailing comment.** `// 0` next to the first indexed slot, `// 1` next to the second, and so on. This collapses the mental "which storage slot is logical index `k`?" stride calculation into a glance.
+3.  **Use sentinel values (typically `0`) for non-indexed positions.** When the non-active slots carry arbitrary values, the reviewer has to inspect every element of `expected` to find which positions actually changed. With sentinel slots, the modified positions pop out of the page.
+
+```javascript
+// Before — flat, no annotations, non-sentinel padding; the reader has to count strides AND visually diff input vs. expected to find what changed
+xbuf     = new Complex128Array( [ -2.0, 1.0, 3.0, -5.0, 4.0, 0.0, -1.0, -3.0 ] );
+expected = new Complex128Array( [ -7.0, 1.0, 3.0, -5.0, -1.0, 0.0, -1.0, -3.0 ] );
+
+// After — broken out, indexed elements annotated, non-indexed slots sentinelized; the active positions and the modifications are both visible at a glance
+var x = [
+    1, // 0
+    1, // 0
+    0,
+    0,
+    2, // 1
+    2, // 1
+    0,
+    0,
+    3, // 2
+    3, // 2
+    // ...
+];
+```
+
+Kgryte's rationale, on the cost the flat form imposes on the reviewer:
+
+> 1.  You have moved everything to a single line, so visually grouping related elements takes more work.
+> 2.  You have omitted the element comments, so the reviewer needs to mentally keep track of which elements are indexed.
+> 3.  You have included non-sentinel values for those elements which are **not** indexed, which means that the reviewer needs to actually visually inspect the expected output, as it is not obvious which values are modified and which are not.
+> 4.  You are forcing the reviewer to maintain a lot of mental state to determine whether tests are properly implemented, which leads the reviewer to put a lot of faith in hoping that test failures will have snuffed out mistakes and increases the likelihood of mistakes slipping through.
+
+And on the tradeoff — the author bears a real cost; the reader (and project) gain more than it costs:
+
+> Yes, it creates more bookkeeping for the test author, and, yes, it increases likelihood of copy-paste mistakes ... but it also makes for much easier review and helps future readers quickly intuit expected behavior.
+
+The trade is asymmetric. A test array is written once and read many times — by reviewers during the PR, by future maintainers tracing failures, by AI agents pattern-matching against existing tests. The author's extra bookkeeping is paid once; the layout benefit accrues across every subsequent read.
+
+This sits alongside [Fixture File Formatting](#fixture-file-formatting): both are about making data layout match logical structure, but the JS test case has its own pattern — index comments plus sentinel non-indexed slots — that the JSON-fixture case does not.
+
 ## Blank Lines as Grouping
 
 Horizontal whitespace is one axis of the principle; vertical whitespace is the other. A blank line between two groups of related statements is itself a communicative choice — it tells the reader "these belong together; those belong together" without a comment.
@@ -376,6 +422,7 @@ Concrete heuristics:
 -   **Complex expressions:** do the spaces help the reader identify sub-structure? If so, they are probably justified.
 -   **Consistency with context:** does this expression follow the same spacing pattern as similar expressions in the same file or namespace? If not, is there a reason?
 -   **JSON fixture arrays that represent matrices:** is the array formatted flat, or does it visually mirror the row structure? If the data is a matrix, prefer row-grouped formatting. Apply this to all fixture files in the PR, not just the one under review.
+-   **Test fixture arrays in `test/test.js`:** are strided test arrays broken vertically with `// 0`, `// 1`, ... index comments on the indexed slots and sentinel `0` values in non-indexed slots? Flat single-line arrays of non-sentinel values force the reviewer to count strides _and_ visually diff input against expected to find what changed.
 -   **Blank lines between related statements:** is a group boundary being communicated visually? If a lint rule has stripped or complained about a blank line that was doing real grouping work, the fix is a localized lint-disable comment, not removing the line.
 -   **Asymmetric spacing (brackets and operators):** `[ i]` or `[i ]` is always wrong regardless of context — brackets either both have interior space or neither does. The same symmetry rule applies to binary operators: `i% z` and `i %z` are equally wrong. These are the few places where the project is strict rather than judgment-laden.
 -   **Proportionality:** is this change worth the review cost? Sweeping whitespace-only PRs across unrelated expressions rarely pay for themselves. Flag an individual expression where spacing is actively hurting readability; don't run a file- or package-wide whitespace refactor.
@@ -412,6 +459,8 @@ The converse also holds: **a lint error is not always right**. When a mechanical
 [gh-10485]: https://github.com/stdlib-js/stdlib/pull/10485
 
 [gh-10485-r3098594580]: https://github.com/stdlib-js/stdlib/pull/10485#discussion_r3098594580
+
+[gh-12407-r3331009148]: https://github.com/stdlib-js/stdlib/pull/12407#discussion_r3331009148
 
 [gh-10262]: https://github.com/stdlib-js/stdlib/pull/10262
 
